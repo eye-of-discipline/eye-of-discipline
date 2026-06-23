@@ -1,0 +1,249 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+STANDARDS_DIR="standards"
+DOMAINS_FILE="standards/domain.json"
+TEMPLATE_DIR="standards/template"
+MKDOCS_FILE="mkdocs.yml"
+
+usage() {
+    cat <<'EOF'
+Usage:
+  bin/tools/discipline_create_standard [options] DOMAIN "STANDARD NAME"
+
+Creates a standard skeleton with README.md, README.pl.md and README.en.md,
+assigns the next ID in the domain and links it in mkdocs.yml.
+
+Arguments:
+  DOMAIN          Domain path registered in standards/domain.json, for example: repozytorium
+  STANDARD NAME   Human-readable standard name, for example: "Ochrona głównej gałęzi"
+
+Options:
+  -s, --standards-dir PATH   Directory with standards. Default: standards
+  -d, --domains-file PATH    Domain registry file. Default: standards/domain.json
+  -t, --template-dir PATH    Standard template directory. Default: standards/template
+  -m, --mkdocs-file PATH     MkDocs configuration. Default: mkdocs.yml
+  -h, --help                 Show this help
+EOF
+}
+
+fail() {
+    printf 'ERROR: %s\n' "$*" >&2
+    exit 1
+}
+
+require_command() {
+    local command_name="$1"
+    command -v "$command_name" >/dev/null 2>&1 || fail "required command not found: $command_name"
+}
+
+parse_args() {
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+        -s|--standards-dir)
+            [[ $# -ge 2 ]] || fail "$1 requires a value"
+            STANDARDS_DIR="$2"
+            shift 2
+            ;;
+        -d|--domains-file)
+            [[ $# -ge 2 ]] || fail "$1 requires a value"
+            DOMAINS_FILE="$2"
+            shift 2
+            ;;
+        -t|--template-dir)
+            [[ $# -ge 2 ]] || fail "$1 requires a value"
+            TEMPLATE_DIR="$2"
+            shift 2
+            ;;
+        -m|--mkdocs-file)
+            [[ $# -ge 2 ]] || fail "$1 requires a value"
+            MKDOCS_FILE="$2"
+            shift 2
+            ;;
+        -h|--help)
+            usage
+            exit 0
+            ;;
+        --)
+            shift
+            break
+            ;;
+        -*)
+            fail "unknown argument: $1"
+            ;;
+        *)
+            break
+            ;;
+        esac
+    done
+
+    [[ $# -eq 2 ]] || fail 'expected DOMAIN and "STANDARD NAME" arguments'
+    DOMAIN_PATH="$1"
+    STANDARD_NAME="$2"
+}
+
+validate_input() {
+    [[ "$DOMAIN_PATH" =~ ^[a-z0-9][a-z0-9_-]*$ ]] \
+        || fail "invalid domain path: $DOMAIN_PATH"
+    [[ -n "$STANDARD_NAME" ]] || fail "standard name cannot be empty"
+    [[ "$STANDARD_NAME" != *$'\n'* ]] || fail "standard name cannot contain a newline"
+
+    [[ -f "$DOMAINS_FILE" ]] || fail "domain registry not found: $DOMAINS_FILE"
+    [[ -d "$TEMPLATE_DIR" ]] || fail "standard template not found: $TEMPLATE_DIR"
+    [[ -f "$MKDOCS_FILE" ]] || fail "MkDocs configuration not found: $MKDOCS_FILE"
+
+    jq -e 'type == "array"' "$DOMAINS_FILE" >/dev/null \
+        || fail "invalid domain registry: expected array"
+}
+
+read_domain_gid() {
+    local gid
+
+    gid="$(jq -r --arg path "$DOMAIN_PATH" '[.[] | select(.path == $path) | .gid] | if length == 1 then .[0] else empty end' "$DOMAINS_FILE")"
+    [[ -n "$gid" ]] || fail "domain is not registered in $DOMAINS_FILE: $DOMAIN_PATH"
+    [[ "$gid" =~ ^[A-Z][A-Z0-9]*$ ]] || fail "invalid gid for domain $DOMAIN_PATH: $gid"
+
+    printf '%s' "$gid"
+}
+
+next_standard_id() {
+    local gid="$1"
+    local max_number=0
+    local directory
+    local basename
+    local number
+
+    while IFS= read -r directory; do
+        basename="$(basename "$directory")"
+        if [[ "$basename" =~ ^STD-${gid}-([0-9]{3})$ ]]; then
+            number=$((10#${BASH_REMATCH[1]}))
+            if ((number > max_number)); then
+                max_number="$number"
+            fi
+        fi
+    done < <(find "$STANDARDS_DIR/$DOMAIN_PATH" -mindepth 1 -maxdepth 1 -type d 2>/dev/null | sort)
+
+    printf 'STD-%s-%03d' "$gid" "$((max_number + 1))"
+}
+
+render_template_file() {
+    local source_file="$1"
+    local target_file="$2"
+    local line
+
+    mkdir -p "$(dirname "$target_file")"
+
+    while IFS= read -r line || [[ -n "$line" ]]; do
+        line="${line//\{\{STD_ID\}\}/$STANDARD_ID}"
+        line="${line//\{\{DOMAIN_PATH\}\}/$DOMAIN_PATH}"
+        line="${line//\{\{DOMAIN_GID\}\}/$DOMAIN_GID}"
+        line="${line//\{\{STANDARD_NAME\}\}/$STANDARD_NAME}"
+        printf '%s\n' "$line"
+    done < "$source_file" > "$target_file"
+}
+
+render_standard() {
+    local template_file
+    local relative_path
+    local target_file
+
+    while IFS= read -r template_file; do
+        relative_path="${template_file#"$TEMPLATE_DIR"/}"
+        relative_path="${relative_path%.tpl}"
+        target_file="$STANDARD_DIR/$relative_path"
+        render_template_file "$template_file" "$target_file"
+    done < <(find "$TEMPLATE_DIR" -type f -name '*.tpl' | sort)
+
+    [[ -f "$STANDARD_DIR/README.md" ]] || fail "template did not produce README.md"
+    [[ -f "$STANDARD_DIR/README.pl.md" ]] || fail "template did not produce README.pl.md"
+    [[ -f "$STANDARD_DIR/README.en.md" ]] || fail "template did not produce README.en.md"
+    [[ -f "$STANDARD_DIR/.gitlab-ci.yml" ]] || fail "template did not produce .gitlab-ci.yml"
+    [[ -f "$STANDARD_DIR/bin/checks" ]] || fail "template did not produce bin/checks"
+
+    chmod +x "$STANDARD_DIR/bin/checks"
+}
+
+link_standard_in_mkdocs() {
+    local domain_label="${DOMAIN_PATH^}"
+    local domain_line="      - ${domain_label}:"
+    local standard_line="          - ${STANDARD_DIR}/README.md"
+    local temp_file
+
+    if grep -Fqx "$standard_line" "$MKDOCS_FILE"; then
+        fail "standard is already linked in $MKDOCS_FILE: $STANDARD_ID"
+    fi
+
+    temp_file="$(mktemp)"
+
+    awk \
+        -v domain_line="$domain_line" \
+        -v standard_line="$standard_line" '
+        BEGIN {
+            in_domain = 0
+            domain_found = 0
+            inserted = 0
+        }
+
+        $0 == domain_line {
+            domain_found = 1
+            in_domain = 1
+            print
+            next
+        }
+
+        in_domain && ($0 ~ /^      - / || $0 ~ /^  - /) {
+            print standard_line
+            inserted = 1
+            in_domain = 0
+        }
+
+        !domain_found && $0 == "  - Tags: docs/tags.md" {
+            print domain_line
+            print standard_line
+            inserted = 1
+        }
+
+        { print }
+
+        END {
+            if (in_domain && !inserted) {
+                print standard_line
+                inserted = 1
+            }
+
+            if (!inserted) {
+                exit 2
+            }
+        }
+    ' "$MKDOCS_FILE" > "$temp_file" || {
+        rm -f "$temp_file"
+        fail "cannot locate discipline navigation in $MKDOCS_FILE"
+    }
+
+    mv "$temp_file" "$MKDOCS_FILE"
+}
+
+main() {
+    require_command jq
+    parse_args "$@"
+    validate_input
+
+    DOMAIN_GID="$(read_domain_gid)"
+    STANDARD_ID="$(next_standard_id "$DOMAIN_GID")"
+    STANDARD_DIR="$STANDARDS_DIR/$DOMAIN_PATH/$STANDARD_ID"
+
+    [[ ! -e "$STANDARD_DIR" ]] || fail "standard directory already exists: $STANDARD_DIR"
+
+    mkdir -p "$STANDARD_DIR"
+    render_standard
+    link_standard_in_mkdocs
+
+    printf 'Created discipline standard\n'
+    printf '  id: %s\n' "$STANDARD_ID"
+    printf '  name: %s\n' "$STANDARD_NAME"
+    printf '  path: %s\n' "$STANDARD_DIR"
+    printf '  mkdocs: %s\n' "$MKDOCS_FILE"
+    printf '  check status: not implemented (exit 120)\n'
+}
+
+main "$@"

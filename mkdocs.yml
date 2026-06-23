@@ -107,6 +107,7 @@ nav:
       - docs/creating_standards/writing_standard_check.md
     - Standards development process:
       - bin/tools/discipline_create_domain.md
+      - bin/tools/discipline_create_standard.md
     - Changelog: CHANGELOG.md
   - Discipline Rules:
       - Repository:
