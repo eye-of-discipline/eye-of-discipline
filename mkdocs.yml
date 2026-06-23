@@ -1,7 +1,7 @@
 ---
 site_name: Eye of Discipline
 site_description: Managing your discipline policies
-site_url: https://eye-of-discipline.github.io/eye-of-discipline/
+site_url: https://eye-of-discipline.github.io
 repo_url: https://github.com/eye-of-discipline/eye-of-discipline
 repo_name: eye-of-discipline
 edit_uri: edit/main/
@@ -10,17 +10,23 @@ docs_dir: .
 site_dir: site
 
 extra:
+  alternate:
+    - name: English
+      link: /en/ 
+      lang: en
+    - name: Polski
+      link: /pl/
+      lang: pl
   version:
     provider: mike
     default: latest
 
 theme:
   name: material
-  language: pl
+  language: en
   logo: docs/logo.png
   features:
     - navigation.tabs
-    - navigation.instant
     - navigation.top
     - content.code.copy
     - toc.follow
@@ -30,33 +36,19 @@ theme:
       accent: indigo
       toggle:
         icon: material/weather-sunny
-        name: Tryb jasny
+        name: light mode
     - scheme: default
       primary: indigo
       accent: indigo
       toggle:
         icon: material/weather-night
-        name: Tryb ciemny
+        name: dark mode
 
 extra_css:
   - stylesheets/extra.css
 
-plugins:
-  - material/offline
-  - same-dir
-  - search
-  - material/tags
-
 validation:
   omitted_files: ignore
-
-
-exclude_docs: |
-  /README.md
-  CLAUDE.md
-  CODE_OF_CONDUCT.md
-  CONTRIBUTING.md
-
 
 markdown_extensions:
   - admonition
@@ -79,23 +71,58 @@ extra_javascript:
   - https://unpkg.com/tablesort@5.3.0/dist/tablesort.min.js
   - javascripts/tablesort.js
 
+plugins:
+  - material/offline
+  - same-dir
+  - search
+  - material/tags
+  - i18n:
+      docs_structure: suffix
+      languages:
+        - locale: en
+          name: English
+          default: true
+          build: true
+        - locale: pl
+          name: Polski
+          build: true
+          nav_translations:
+            Home: Strona główna
+            Roles: Role
+            Glossary: Słownik pojęć
+            Creating Standards: Tworzenie norm
+            Discipline Rules: Zasady Dyscypliny
+            Standards development process: Proces wytwórczy standardów
+
 nav:
   - Home:
-      - index.md
-      - Roles: docs/roles.md
-      - Glossary: docs/glossary.md
-      - Creating Standards:
-          - How to Write Standards?: docs/how_to_write_standards.md
-          - Creating a Documentation Domain: docs/standard_domain_documentation.md
-          - BCP 14 Normative Language: docs/bcp14_standard_language.md
-          - Writing Documentation: docs/writing_standard_documentation.md
-          - Writing a Standard Check: docs/writing_standard_check.md
-      - Changelog: CHANGELOG.md
+    - index.md
+    - Roles: docs/roles.md
+    - Glossary: docs/glossary.md
+    - Creating Standards:
+      - docs/creating_standards/how_to_write_standards.md
+      - docs/creating_standards/standard_domain_documentation.md
+      - docs/creating_standards/bcp14_standard_language.md
+      - docs/creating_standards/writing_standard_documentation.md
+      - docs/creating_standards/writing_standard_check.md
+    - Standards development process:
+      - bin/tools/discipline_create_domain.md
+    - Changelog: CHANGELOG.md
   - Discipline Rules:
       - Repository:
           - standards/repository/STD-REPO-001/README.md
-          - standards/repository/STD-REPO-002/README.md
-          - standards/repository/STD-REPO-003/README.md
+
+  
+  #     - Proces tworzenia standardów:
+  #         - Idea procesu tworzenia: docs/creative_process.md
+  #         - Generator domen dyscypliny: bin/tools/discipline_create_domain.md
+  #     - Proces weryfikacji standardów:
+  #         - Idea procesu weryfikacji: docs/verification_process.md
+  #     - Proces raportowania:
+  #         - Idea procesu raportowania: docs/reporting_process.md
+  #     - Changelog: CHANGELOG.md
+  # - Zasady dyscypliny:
+  #     - Repozytorium:
+  #         - standards/repository/STD-REPO-001/README.md
       - Changelog: CHANGELOG.md
   - Tags: docs/tags.md
-  - Dashboard: docs/dashboard.md
