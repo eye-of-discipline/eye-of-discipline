@@ -1,0 +1,28 @@
+.md-grid {
+  max-width: 100%;
+}
+
+@media (min-width: 1220px) {
+  .md-sidebar {
+    width: 330px;
+  }
+
+.md-nav--primary {
+    width: 320px;
+  }
+}
+
+/* Make expandable navigation groups easier to distinguish from regular links. */
+.md-nav__item--nested > .md-nav__link {
+  font-weight: 700;
+}
+
+/* Enlarge logo */
+.md-header__button.md-logo {
+    margin: 0;
+    padding: 10;
+}
+.md-header__button.md-logo img, .md-header__button.md-logo svg {
+    height: 2.4rem;
+    width: 2.4rem;
+}

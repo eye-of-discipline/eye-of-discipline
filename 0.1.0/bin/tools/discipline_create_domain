@@ -1,0 +1,155 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+STANDARDS_DIR="standards"
+DOMAINS_FILE="standards/domain.json"
+
+usage() {
+    cat <<'EOF'
+Usage:
+  bin/tools/discipline_create_domain [--standards-dir standards] [--domains-file standards/domain.json] PATH GID
+
+Creates a new discipline domain directory and registers it in standards/domain.json.
+
+Arguments:
+  PATH    Domain path under standards/, for example: repozytorium
+  GID     Short domain identifier used in standard IDs, for example: REPO
+
+Options:
+  -s, --standards-dir PATH   Directory with standards. Default: standards
+  -d, --domains-file PATH    Domain registry file. Default: standards/domain.json
+  -h, --help                 Show this help
+EOF
+}
+
+fail() {
+    printf 'ERROR: %s\n' "$*" >&2
+    exit 1
+}
+
+require_command() {
+    local command_name="$1"
+    command -v "$command_name" >/dev/null 2>&1 || fail "required command not found: $command_name"
+}
+
+validate_domain_path() {
+    local domain_path="$1"
+
+    [[ "$domain_path" =~ ^[a-z0-9][a-z0-9_-]*$ ]] \
+        || fail "invalid domain path: expected lowercase slug, got '$domain_path'"
+}
+
+validate_domain_gid() {
+    local domain_gid="$1"
+
+    [[ "$domain_gid" =~ ^[A-Z][A-Z0-9]*$ ]] \
+        || fail "invalid domain gid: expected uppercase identifier, got '$domain_gid'"
+}
+
+ensure_domains_file() {
+    local domains_dir
+
+    domains_dir="$(dirname "$DOMAINS_FILE")"
+    mkdir -p "$domains_dir"
+
+    if [[ ! -f "$DOMAINS_FILE" ]]; then
+        printf '[\n]\n' > "$DOMAINS_FILE"
+    fi
+
+    jq -e '
+        type == "array"
+        and all(.[]; type == "object" and (.path | type == "string") and (.gid | type == "string"))
+    ' "$DOMAINS_FILE" >/dev/null || fail "invalid domain registry: expected array of {path, gid} objects"
+}
+
+ensure_unique_domain() {
+    local domain_path="$1"
+    local domain_gid="$2"
+
+    if jq -e --arg path "$domain_path" 'any(.[]; .path == $path)' "$DOMAINS_FILE" >/dev/null; then
+        fail "domain path already exists in $DOMAINS_FILE: $domain_path"
+    fi
+
+    if jq -e --arg gid "$domain_gid" 'any(.[]; .gid == $gid)' "$DOMAINS_FILE" >/dev/null; then
+        fail "domain gid already exists in $DOMAINS_FILE: $domain_gid"
+    fi
+
+    if [[ -e "$STANDARDS_DIR/$domain_path" ]]; then
+        fail "domain directory already exists: $STANDARDS_DIR/$domain_path"
+    fi
+}
+
+append_domain() {
+    local domain_path="$1"
+    local domain_gid="$2"
+    local temp_file
+
+    temp_file="$(mktemp)"
+    jq \
+        --arg path "$domain_path" \
+        --arg gid "$domain_gid" \
+        '. + [{"path": $path, "gid": $gid}] | sort_by(.path)' \
+        "$DOMAINS_FILE" > "$temp_file"
+
+    mv "$temp_file" "$DOMAINS_FILE"
+}
+
+parse_args() {
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+        -s|--standards-dir)
+            [[ $# -ge 2 ]] || fail "$1 requires a value"
+            STANDARDS_DIR="$2"
+            shift 2
+            ;;
+        -d|--domains-file)
+            [[ $# -ge 2 ]] || fail "$1 requires a value"
+            DOMAINS_FILE="$2"
+            shift 2
+            ;;
+        -h|--help)
+            usage
+            exit 0
+            ;;
+        --)
+            shift
+            break
+            ;;
+        -*)
+            fail "unknown argument: $1"
+            ;;
+        *)
+            break
+            ;;
+        esac
+    done
+
+    [[ $# -eq 2 ]] || fail "expected PATH and GID arguments"
+    DOMAIN_PATH="$1"
+    DOMAIN_GID="$2"
+}
+
+main() {
+    local domain_dir
+
+    require_command jq
+    parse_args "$@"
+
+    validate_domain_path "$DOMAIN_PATH"
+    validate_domain_gid "$DOMAIN_GID"
+
+    mkdir -p "$STANDARDS_DIR"
+    ensure_domains_file
+    ensure_unique_domain "$DOMAIN_PATH" "$DOMAIN_GID"
+
+    domain_dir="$STANDARDS_DIR/$DOMAIN_PATH"
+    mkdir -p "$domain_dir"
+    append_domain "$DOMAIN_PATH" "$DOMAIN_GID"
+
+    printf 'Created discipline domain\n'
+    printf '  path: %s\n' "$domain_dir"
+    printf '  gid: %s\n' "$DOMAIN_GID"
+    printf '  registry: %s\n' "$DOMAINS_FILE"
+}
+
+main "$@"

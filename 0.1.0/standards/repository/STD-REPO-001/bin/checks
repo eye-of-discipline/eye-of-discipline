@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# shellcheck source=bin/logger disable=SC1091
+source bin/logger
+
+export CHECKS_STD_PROC_001=0
+
+info "STD-REPO-001 • Repository file structure"
+
+check_files(){
+    if [[ -f $2 ]]; then
+        h3 "✔️   $1 File $2 exists"
+    else
+        export CHECKS_STD_PROC_001=1
+        h3 "❌  $1 File $2 is missing";
+    fi
+}
+
+check_files "R1." README.md
+check_files "R2." CODEOWNERS
+check_files "R3." CHANGELOG.md
+check_files "R4." LICENSE
+check_files "R5." CONTRIBUTING.md
+check_files "R6." CODE_OF_CONDUCT.md
+check_files "R7." .gitlab/footer.md
+check_files "R8." .gitlab/badges.md
+check_files "R9." .gitlab/avatar.png
+check_files "R10." .gitignore
+
+exit $CHECKS_STD_PROC_001
