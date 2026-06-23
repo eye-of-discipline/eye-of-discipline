@@ -42,11 +42,10 @@ extra_css:
   - stylesheets/extra.css
 
 plugins:
-  - offline
+  - material/offline
   - same-dir
   - search
-  - meta
-  - tags
+  - material/tags
 
 validation:
   omitted_files: ignore

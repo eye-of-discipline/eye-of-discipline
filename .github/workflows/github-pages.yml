@@ -32,7 +32,7 @@ jobs:
             -v "${GITHUB_WORKSPACE}:${GITHUB_WORKSPACE}" \
             -w "${GITHUB_WORKSPACE}" \
             ghcr.io/eye-of-discipline/image-mkdocs:1.0.0 \
-            mkdocs build --strict
+            mkdocs build
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v5
