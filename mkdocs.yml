@@ -1,0 +1,8 @@
+site_name: eye-of-discipline
+site_description: Managing your discipline policies.
+
+theme:
+  name: material
+
+nav:
+  - Home: index.md
