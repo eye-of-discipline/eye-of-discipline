@@ -1,4 +1,13 @@
-# eye-of-discipline
+# <img src="docs/logo.png" alt="logo" style="height:40px;"> Eye of Discipline
+
+![GitLab Stars](https://img.shields.io/gitlab/stars/dev.rachuna/eye-of-discipline)
+![GitLab Forks](https://img.shields.io/gitlab/forks/dev.rachuna/eye-of-discipline)
+![Repository Type](https://img.shields.io/badge/Repository%20type-MkDocs-purple)
+![GitLab Release](https://img.shields.io/gitlab/v/release/dev.rachuna/eye-of-discipline)
+![Gitlab Pipeline Status](https://img.shields.io/gitlab/pipeline-status/dev.rachuna/eye-of-discipline)
+![GitLab Issues](https://img.shields.io/gitlab/issues/open/dev.rachuna/eye-of-discipline)
+![GitLab Merge Requests](https://img.shields.io/gitlab/merge-requests/open/dev.rachuna/eye-of-discipline)
+![GitLab Contributors](https://img.shields.io/gitlab/contributors/dev.rachuna/eye-of-discipline)
 
 **Eye of Discipline** organizes software development standards and transforms them into a versioned, measurable product. A standard is no longer just a wiki page: it has a requirements description, version, measurement method, and a report showing which repositories actually comply with it.
 
@@ -76,30 +85,3 @@ The result of a single standard is:
 - `waived` — the requirement is not met, but has an active waiver.
 
 The aggregator collects results from all standards and records a single `conformance.json` report.
-
----
-
-## Changelog
-
-[Changelog](CHAMGELOG.md)
-
----
-
-## Contributions
-
-Jeśli masz pomysły na ulepszenia, zgłoś problemy, rozwidl repository lub utwórz Merge Request. Wszystkie wkłady są mile widziane!
-[Contributions](CONTRIBUTING.md)
-
----
-
-## License
-
-[Licencja](LICENSE) oparta na zasadach Creative Commons BY-NC-SA 4.0, dostosowana do potrzeb projektu.
-
----
-
-## Author Information
-
-| ![Maciej Rachuna](https://gitlab.com/uploads/-/system/user/avatar/8161705/avatar.png?width=120px) |
-|---------------------------------------------------------------------------------------------------|
-| [Maciej Rachuna](https://gitlab.commrachuna)                                                      |
