@@ -10,13 +10,13 @@
       
       
       
-        <link rel="canonical" href="https://eye-of-discipline.github.io/1.0.0/pl/docs/verification_process/gitlab/verification_process.html">
+        <link rel="canonical" href="https://eye-of-discipline.github.io/1.0.0/pl/docs/verification_process/github/verification_process.html">
       
       
-        <link rel="prev" href="../github/verification_process.html">
+        <link rel="prev" href="../../../bin/verification_process/discipline_verify.html">
       
       
-        <link rel="next" href="../../../CHANGELOG.html">
+        <link rel="next" href="../gitlab/verification_process.html">
       
       
       <link rel="icon" href="../../../../assets/images/favicon.png">
@@ -24,7 +24,7 @@
     
     
       
-        <title>GitLab CI jako bramka jakości dyscypliny - Eye of Discipline</title>
+        <title>GitHub Actions jako bramka jakości dyscypliny - Eye of Discipline</title>
       
     
     
@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#gitlab-ci-jako-bramka-jakosci-dyscypliny" class="md-skip">
+        <a href="#github-actions-jako-bramka-jakosci-dyscypliny" class="md-skip">
           Przejdź do treści
         </a>
       
@@ -117,7 +117,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              GitLab CI jako bramka jakości dyscypliny
+              GitHub Actions jako bramka jakości dyscypliny
             
           </span>
         </div>
@@ -164,7 +164,7 @@
       <ul class="md-select__list">
         
           <li class="md-select__item">
-            <a href="../../../../docs/verification_process/gitlab/verification_process.html" hreflang="en" class="md-select__link">
+            <a href="../../../../docs/verification_process/github/verification_process.html" hreflang="en" class="md-select__link">
               English
             </a>
           </li>
@@ -1038,27 +1038,6 @@
                 
   
   
-  
-  
-    <li class="md-nav__item">
-      <a href="../github/verification_process.html" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    GitHub Actions jako bramka jakości dyscypliny
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
     
   
   
@@ -1075,7 +1054,7 @@
           
   
   <span class="md-ellipsis">
-    GitLab CI jako bramka jakości dyscypliny
+    GitHub Actions jako bramka jakości dyscypliny
   </span>
   
 
@@ -1086,7 +1065,7 @@
         
   
   <span class="md-ellipsis">
-    GitLab CI jako bramka jakości dyscypliny
+    GitHub Actions jako bramka jakości dyscypliny
   </span>
   
 
@@ -1126,9 +1105,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#zmienne-pipelineu" class="md-nav__link">
+  <a href="#wejscia-workflow" class="md-nav__link">
     <span class="md-ellipsis">
-      Zmienne pipeline'u
+      Wejścia workflow
     </span>
   </a>
   
@@ -1144,9 +1123,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#przykadowy-pipeline" class="md-nav__link">
+  <a href="#dwa-zroda-kodu" class="md-nav__link">
     <span class="md-ellipsis">
-      Przykładowy pipeline
+      Dwa źródła kodu
     </span>
   </a>
   
@@ -1171,9 +1150,18 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#template-dyscypline" class="md-nav__link">
+  <a href="#odstepstwa" class="md-nav__link">
     <span class="md-ellipsis">
-      Template .dyscypline
+      Odstępstwa
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#status-joba-standardu" class="md-nav__link">
+    <span class="md-ellipsis">
+      Status joba standardu
     </span>
   </a>
   
@@ -1219,6 +1207,27 @@
   
 </nav>
       
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gitlab/verification_process.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    GitLab CI jako bramka jakości dyscypliny
+  </span>
+  
+
+      </a>
     </li>
   
 
@@ -1473,9 +1482,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#zmienne-pipelineu" class="md-nav__link">
+  <a href="#wejscia-workflow" class="md-nav__link">
     <span class="md-ellipsis">
-      Zmienne pipeline'u
+      Wejścia workflow
     </span>
   </a>
   
@@ -1491,9 +1500,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#przykadowy-pipeline" class="md-nav__link">
+  <a href="#dwa-zroda-kodu" class="md-nav__link">
     <span class="md-ellipsis">
-      Przykładowy pipeline
+      Dwa źródła kodu
     </span>
   </a>
   
@@ -1518,9 +1527,18 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#template-dyscypline" class="md-nav__link">
+  <a href="#odstepstwa" class="md-nav__link">
     <span class="md-ellipsis">
-      Template .dyscypline
+      Odstępstwa
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#status-joba-standardu" class="md-nav__link">
+    <span class="md-ellipsis">
+      Status joba standardu
     </span>
   </a>
   
@@ -1597,61 +1615,45 @@
   
 
 
-<h1 id="gitlab-ci-jako-bramka-jakosci-dyscypliny">GitLab CI jako bramka jakości dyscypliny<a class="headerlink" href="#gitlab-ci-jako-bramka-jakosci-dyscypliny" title="Permanent link">&para;</a></h1>
-<p>Plik <code>ci/gitlab/verification-process/.gitlab-ci.yml</code> jest centralnym pipeline'em weryfikacji dyscypliny dla GitLab CI. Repozytorium aplikacji nie powinno kopiować całego procesu do siebie. W głównym pipeline CI powinno podpiąć proces jako zewnętrzny include i potraktować go jako bramkę jakości.</p>
+<h1 id="github-actions-jako-bramka-jakosci-dyscypliny">GitHub Actions jako bramka jakości dyscypliny<a class="headerlink" href="#github-actions-jako-bramka-jakosci-dyscypliny" title="Permanent link">&para;</a></h1>
+<p>Workflow <code>.github/workflows/verification-process.yml</code> jest centralnym procesem weryfikacji zgodności z dyscypliną dla GitHub Actions. Repozytorium aplikacji nie powinno kopiować całego procesu do siebie. Powinno wywołać go jako reusable workflow i potraktować jako bramkę jakości.</p>
 <p>Najważniejszy element integracji:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nt">include</span><span class="p">:</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">project</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dev.rachuna/eye-of-discipline</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="nt">file</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ci/gitlab/verification-process/.gitlab-ci.yml</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">    </span><span class="nt">ref</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">main</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nt">jobs</span><span class="p">:</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span><span class="nt">discipline-verification</span><span class="p">:</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Eye discipline quality gate</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">    </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">eye-of-discipline/eye-of-discipline/.github/workflows/verification-process.yml@main</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">    </span><span class="nt">secrets</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">inherit</span>
 </code></pre></div>
-<p>Taki include dodaje do pipeline'u aplikacji:</p>
+<p>Takie wywołanie dodaje do pipeline'u aplikacji:</p>
 <ul>
 <li>walidację <code>discipline.yaml</code>,</li>
-<li>joby standardów wygenerowane z dyscypliny,</li>
+<li>joby standardów zebrane w <code>.github/workflows/checks-jobs.yml</code>,</li>
+<li>raporty <code>results/{STD_ID}.json</code>,</li>
 <li>agregację wyników do <code>conformance.json</code>,</li>
 <li>decyzję bramki jakości.</li>
 </ul>
 <h2 id="miejsce-w-gownym-ci">Miejsce w głównym CI<a class="headerlink" href="#miejsce-w-gownym-ci" title="Permanent link">&para;</a></h2>
-<p>Pipeline weryfikacji dyscypliny jest częścią głównego CI aplikacji. Nie zastępuje builda, testów jednostkowych ani deploymentu. Działa jako dodatkowa bramka jakości, która odpowiada na pytanie:</p>
+<p>Proces weryfikacji dyscypliny jest częścią głównego CI aplikacji. Nie zastępuje builda, testów jednostkowych ani deploymentu. Działa jako dodatkowa bramka jakości, która odpowiada na pytanie:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>czy repozytorium spełnia standardy zadeklarowanej wersji dyscypliny?
 </code></pre></div>
-<p>Minimalny przykład użycia w repozytorium aplikacji:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nt">stages</span><span class="p">:</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">prepare</span>
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">validate</span>
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tests</span>
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">build</span>
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">deployment</span>
+<p>Minimalny przykład workflow w repozytorium aplikacji:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Discipline verification</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="nt">on</span><span class="p">:</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">  </span><span class="nt">push</span><span class="p">:</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">  </span><span class="nt">pull_request</span><span class="p">:</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">  </span><span class="nt">workflow_dispatch</span><span class="p">:</span>
 <a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>
-<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="nt">include</span><span class="p">:</span>
-<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">project</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dev.rachuna/eye-of-discipline</span>
-<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="w">    </span><span class="nt">file</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ci/gitlab/verification-process/.gitlab-ci.yml</span>
-<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="w">    </span><span class="nt">ref</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">main</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="nt">permissions</span><span class="p">:</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">  </span><span class="nt">contents</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">read</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="nt">jobs</span><span class="p">:</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="w">  </span><span class="nt">discipline-verification</span><span class="p">:</span>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Eye discipline quality gate</span>
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="w">    </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">eye-of-discipline/eye-of-discipline/.github/workflows/verification-process.yml@main</span>
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="w">    </span><span class="nt">secrets</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">inherit</span>
 </code></pre></div>
-<p>Jeżeli aplikacja ma własne stage'e, muszą one zawierać stage'e używane przez pipeline dyscypliny:</p>
-<table>
-<thead>
-<tr>
-<th>Stage</th>
-<th>Rola w procesie dyscypliny</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>prepare</code></td>
-<td>walidacja deklaracji <code>discipline.yaml</code></td>
-</tr>
-<tr>
-<td><code>validate</code></td>
-<td>joby standardów i pojedyncze pomiary</td>
-</tr>
-<tr>
-<td><code>tests</code></td>
-<td>agregacja wyników i decyzja bramki jakości</td>
-</tr>
-</tbody>
-</table>
+<p>GitHub Actions nie ma odpowiednika GitLabowego <code>include</code>, który wstrzykuje dowolny fragment YAML do pipeline'u. Odpowiednikiem w tym procesie jest reusable workflow wywoływany przez <code>jobs.&lt;job&gt;.uses</code>.</p>
 <h2 id="wymagane-pliki-w-repozytorium-aplikacji">Wymagane pliki w repozytorium aplikacji<a class="headerlink" href="#wymagane-pliki-w-repozytorium-aplikacji" title="Permanent link">&para;</a></h2>
 <p>Repozytorium aplikacji musi zawierać:</p>
 <table>
@@ -1668,12 +1670,14 @@
 </tr>
 </tbody>
 </table>
-<p>Repozytorium aplikacji nie musi trzymać lokalnej kopii skryptów:</p>
+<p>Repozytorium aplikacji nie musi trzymać lokalnej kopii:</p>
 <ul>
+<li><code>.github/workflows/verification-process.yml</code>,</li>
+<li><code>.github/workflows/checks-jobs.yml</code>,</li>
 <li><code>bin/verification_process/discipline_validate</code>,</li>
 <li><code>bin/verification_process/discipline_verify</code>.</li>
 </ul>
-<p>Pipeline pobiera je z repozytorium dyscypliny wskazanego w <code>discipline.yaml</code>.</p>
+<p>Workflow pobiera zadeklarowaną wersję dyscypliny z <code>discipline.yaml</code>, a narzędzia procesu z wersji repozytorium, z której uruchomiono reusable workflow.</p>
 <p>Minimalna deklaracja:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">eye-of-discipline.rachuna.dev/v1</span>
 <a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Discipline</span>
@@ -1681,56 +1685,64 @@
 <a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-service</span>
 <a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="nt">spec</span><span class="p">:</span>
 <a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">  </span><span class="nt">discipline</span><span class="p">:</span>
-<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">    </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dev.rachuna/eye-of-discipline</span>
-<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">    </span><span class="nt">ref</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">main</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">    </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">eye-of-discipline/eye-of-discipline</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">    </span><span class="nt">ref</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.0.0</span>
 </code></pre></div>
-<p><code>spec.discipline.repository</code> mówi, skąd pobrać dyscyplinę. <code>spec.discipline.ref</code> mówi, której wersji albo gałęzi dyscypliny użyć do pomiaru.</p>
-<h2 id="zmienne-pipelineu">Zmienne pipeline'u<a class="headerlink" href="#zmienne-pipelineu" title="Permanent link">&para;</a></h2>
-<p>Centralny pipeline definiuje wartości domyślne:</p>
+<p><code>spec.discipline.repository</code> mówi, z którego repozytorium pobrać dyscyplinę. <code>spec.discipline.ref</code> mówi, której wersji albo gałęzi dyscypliny użyć do pomiaru.</p>
+<p>Dla kompatybilności z deklaracjami GitLab workflow mapuje:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>dev.rachuna/eye-of-discipline -&gt; eye-of-discipline/eye-of-discipline
+</code></pre></div>
+<h2 id="wejscia-workflow">Wejścia workflow<a class="headerlink" href="#wejscia-workflow" title="Permanent link">&para;</a></h2>
+<p><code>.github/workflows/verification-process.yml</code> udostępnia <code>workflow_call</code> z następującymi wejściami:</p>
 <table>
 <thead>
 <tr>
-<th>Zmienna</th>
+<th>Input</th>
 <th>Domyślna wartość</th>
 <th>Znaczenie</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>DISCIPLINE_FILE</code></td>
+<td><code>discipline-file</code></td>
 <td><code>discipline.yaml</code></td>
 <td>plik deklaracji zespołu</td>
 </tr>
 <tr>
-<td><code>CONFORMANCE_FILE</code></td>
+<td><code>conformance-file</code></td>
 <td><code>conformance.json</code></td>
-<td>artefakt końcowy z wynikiem QA dyscypliny</td>
+<td>końcowy raport zgodności</td>
 </tr>
 <tr>
-<td><code>EYE_DISCIPLINE_REPO</code></td>
-<td><code>dev.rachuna/eye-of-discipline</code></td>
+<td><code>discipline-repository</code></td>
+<td><code>eye-of-discipline/eye-of-discipline</code></td>
 <td>fallback repozytorium dyscypliny</td>
 </tr>
 <tr>
-<td><code>EYE_DISCIPLINE_REF</code></td>
+<td><code>discipline-ref</code></td>
 <td><code>main</code></td>
-<td>fallback ref procesu</td>
-</tr>
-<tr>
-<td><code>EYE_DISCIPLINE_VALIDATE_SCRIPT_PATH</code></td>
-<td><code>bin/verification_process/discipline_validate</code></td>
-<td>ścieżka walidatora w repozytorium dyscypliny</td>
-</tr>
-<tr>
-<td><code>EYE_DISCIPLINE_VERIFY_SCRIPT_PATH</code></td>
-<td><code>bin/verification_process/discipline_verify</code></td>
-<td>ścieżka agregatora w repozytorium dyscypliny</td>
+<td>fallback ref dyscypliny</td>
 </tr>
 </tbody>
 </table>
-<p>W praktyce najważniejsze wartości powinny pochodzić z <code>discipline.yaml</code>, bo to deklaracja aplikacji określa wersję dyscypliny. Zmienne <code>EYE_DISCIPLINE_*</code> są fallbackiem technicznym.</p>
+<p>Workflow może też dostać opcjonalny sekret:</p>
+<table>
+<thead>
+<tr>
+<th>Secret</th>
+<th>Znaczenie</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GH_TOKEN</code></td>
+<td>token używany do checkoutu prywatnych repozytoriów dyscypliny</td>
+</tr>
+</tbody>
+</table>
+<p>Jeżeli repozytoria są publiczne, wystarcza domyślny <code>github.token</code>.</p>
 <h2 id="struktura-procesu">Struktura procesu<a class="headerlink" href="#struktura-procesu" title="Permanent link">&para;</a></h2>
-<p>Centralny pipeline składa się z czterech części:</p>
+<p>Proces składa się z trzech części:</p>
 <table>
 <thead>
 <tr>
@@ -1741,47 +1753,78 @@
 </thead>
 <tbody>
 <tr>
-<td>lista jobów standardów</td>
-<td><code>ci/gitlab/verification-process/cheks_jobs.yml</code></td>
-<td>dołącza joby standardów opublikowane przez dyscyplinę</td>
-</tr>
-<tr>
-<td>template standardu</td>
-<td><code>.dyscypline</code></td>
-<td>pobiera dyscyplinę, obsługuje odstępstwa i zapisuje <code>results/{STD_ID}.json</code></td>
-</tr>
-<tr>
 <td>walidacja deklaracji</td>
 <td><code>👁️ Eye discipline:Validate discipline declaration</code></td>
 <td>sprawdza kontrakt <code>discipline.yaml</code></td>
 </tr>
 <tr>
+<td>joby standardów</td>
+<td><code>.github/workflows/checks-jobs.yml</code></td>
+<td>uruchamia joby standardów i zapisuje <code>results/{STD_ID}.json</code></td>
+</tr>
+<tr>
 <td>agregacja wyników</td>
 <td><code>🪬 Eye discipline:Verify discipline standards</code></td>
-<td>buduje <code>conformance.json</code> i zwraca kod bramki jakości</td>
+<td>buduje <code>conformance.json</code> i zwraca decyzję bramki jakości</td>
 </tr>
 </tbody>
 </table>
-<p>Pipeline zaczyna się od include jobów standardów:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nt">include</span><span class="p">:</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span><span class="nt">local</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ci/gitlab/verification-process/cheks_jobs.yml</span>
+<p>Przepływ:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>👁️ Eye discipline:Validate discipline declaration
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>      |
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>      v
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>👁️ Eye discipline:Verify standard jobs
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>      |
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>      v
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>🪬 Eye discipline:Verify discipline standards
 </code></pre></div>
-<p>W wersji eksportowanej przez centralny include jest to część repozytorium dyscypliny. Aplikacja podłącza tylko główny plik <code>ci/gitlab/verification-process/.gitlab-ci.yml</code>.</p>
-<h2 id="przykadowy-pipeline">Przykładowy pipeline<a class="headerlink" href="#przykadowy-pipeline" title="Permanent link">&para;</a></h2>
-<p><img alt="pipeline" src="../../../../docs/verification_process/gitlab/pipeline.png" /></p>
+<p>Job <code>👁️ Eye discipline:Verify standard jobs</code> wywołuje drugi reusable workflow:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./.github/workflows/checks-jobs.yml</span>
+</code></pre></div>
+<h2 id="dwa-zroda-kodu">Dwa źródła kodu<a class="headerlink" href="#dwa-zroda-kodu" title="Permanent link">&para;</a></h2>
+<p>Workflow używa dwóch checkoutów:</p>
+<table>
+<thead>
+<tr>
+<th>Katalog</th>
+<th>Źródło</th>
+<th>Zastosowanie</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.discipline-source</code></td>
+<td><code>spec.discipline.repository</code> i <code>spec.discipline.ref</code></td>
+<td>wersja dyscypliny zadeklarowana przez aplikację, w tym standardy i checki</td>
+</tr>
+<tr>
+<td><code>.discipline-process-source</code></td>
+<td>repozytorium/ref reusable workflow</td>
+<td>aktualne narzędzia procesu weryfikacji</td>
+</tr>
+</tbody>
+</table>
+<p>Rozdzielenie jest potrzebne, ponieważ starszy tag dyscypliny może zawierać standardy, ale nie musi jeszcze zawierać najnowszych skryptów procesu:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>bin/verification_process/discipline_validate
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>bin/verification_process/discipline_verify
+</code></pre></div>
+<p>Jeżeli skrypt istnieje w <code>.discipline-source</code>, workflow używa wersji z zadeklarowanej dyscypliny. Jeżeli go tam nie ma, używa wersji z <code>.discipline-process-source</code>.</p>
 <h2 id="walidacja-deklaracji">Walidacja deklaracji<a class="headerlink" href="#walidacja-deklaracji" title="Permanent link">&para;</a></h2>
 <p>Job:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>👁️ Eye discipline:Validate discipline declaration
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>👁️ Eye discipline:Validate discipline declaration
 </code></pre></div>
-<p>działa w stage'u <code>prepare</code>. Pobiera walidator z repozytorium dyscypliny:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="nv">encoded_project</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">DISCIPLINE_REPOSITORY</span><span class="p">//</span><span class="se">\/</span><span class="p">/%2F</span><span class="si">}</span><span class="s2">&quot;</span>
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="nv">encoded_path</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">EYE_DISCIPLINE_VALIDATE_SCRIPT_PATH</span><span class="p">//</span><span class="se">\/</span><span class="p">/%2F</span><span class="si">}</span><span class="s2">&quot;</span>
-<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="nv">validate_url</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">CI_API_V4_URL</span><span class="si">}</span><span class="s2">/projects/</span><span class="si">${</span><span class="nv">encoded_project</span><span class="si">}</span><span class="s2">/repository/files/</span><span class="si">${</span><span class="nv">encoded_path</span><span class="si">}</span><span class="s2">/raw?ref=</span><span class="si">${</span><span class="nv">DISCIPLINE_REF</span><span class="si">}</span><span class="s2">&quot;</span>
+<p>działa w kontenerze:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>ghcr.io/eye-of-discipline/image-python:1.0.0
 </code></pre></div>
-<p>Następnie uruchamia:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>./.discipline_validate<span class="w"> </span>--file<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$DISCIPLINE_FILE</span><span class="s2">&quot;</span>
-</code></pre></div>
-<p>Walidator sprawdza kontrakt deklaracji:</p>
+<p>Job wykonuje:</p>
+<ol>
+<li>checkout repozytorium aplikacji,</li>
+<li>odczyt <code>spec.discipline.repository</code> i <code>spec.discipline.ref</code>,</li>
+<li>checkout zadeklarowanej wersji dyscypliny,</li>
+<li>checkout repozytorium procesu,</li>
+<li>uruchomienie <code>discipline_validate</code>.</li>
+</ol>
+<p>Walidator sprawdza:</p>
 <ul>
 <li>obecność pliku,</li>
 <li><code>apiVersion</code>,</li>
@@ -1794,54 +1837,68 @@
 </ul>
 <p>Błąd walidacji oznacza błąd deklaracji, a nie niezgodność ze standardem.</p>
 <h2 id="joby-standardow">Joby standardów<a class="headerlink" href="#joby-standardow" title="Permanent link">&para;</a></h2>
-<p>Każdy standard ma własny job. Definicje jobów są generowane w procesie wytwórczym dyscypliny i publikowane w:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>ci/gitlab/verification-process/cheks_jobs.yml
+<p>Każdy standard ma własny job źródłowy w katalogu standardu:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>standards/{domain}/{STD_ID}/.github-actions.yml
+</code></pre></div>
+<p>Proces wytwórczy skleja te definicje do:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>.github/workflows/checks-jobs.yml
 </code></pre></div>
 <p>Obowiązuje zasada:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>jeden standard = jeden job = jeden raport results/{STD_ID}.json
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>jeden standard = jeden job = jeden raport results/{STD_ID}.json
 </code></pre></div>
-<p>Job standardu rozszerza <code>.dyscypline</code>, ustawia <code>STD_ID</code>, uruchamia właściwy <code>bin/checks</code> i zapisuje raport:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="p">{</span><span class="nt">&quot;key&quot;</span><span class="p">:</span><span class="s2">&quot;STD-REPO-001&quot;</span><span class="p">,</span><span class="nt">&quot;status&quot;</span><span class="p">:</span><span class="s2">&quot;pass&quot;</span><span class="p">}</span>
+<p>Przykładowy job:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="nt">std-repo-001</span><span class="p">:</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">👁️ Eye discipline:STD-REPO-001</span>
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="w">  </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-latest</span>
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="w">  </span><span class="nt">container</span><span class="p">:</span>
+<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ghcr.io/eye-of-discipline/image-python:1.0.0</span>
+<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a><span class="w">  </span><span class="nt">env</span><span class="p">:</span>
+<a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a><span class="w">    </span><span class="nt">STD_DOMAIN</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">repository</span>
+<a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a><span class="w">    </span><span class="nt">STD_ID</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">STD-REPO-001</span>
+<a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a><span class="w">    </span><span class="nt">DOCS_MD_FILE_PATH</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">standards/repository/STD-REPO-001/README.en.md</span>
+<a id="__codelineno-13-10" name="__codelineno-13-10" href="#__codelineno-13-10"></a><span class="w">    </span><span class="nt">STD_CHECK_SCRIPT</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">.discipline-source/standards/repository/STD-REPO-001/bin/checks</span>
 </code></pre></div>
-<p>Jeżeli dla standardu istnieje aktywne odstępstwo, raport ma status <code>waived</code>:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="p">{</span><span class="nt">&quot;key&quot;</span><span class="p">:</span><span class="s2">&quot;STD-REPO-002&quot;</span><span class="p">,</span><span class="nt">&quot;status&quot;</span><span class="p">:</span><span class="s2">&quot;waived&quot;</span><span class="p">,</span><span class="nt">&quot;exception&quot;</span><span class="p">:{</span><span class="nt">&quot;check&quot;</span><span class="p">:</span><span class="s2">&quot;STD-REPO-002&quot;</span><span class="p">,</span><span class="nt">&quot;reason&quot;</span><span class="p">:</span><span class="s2">&quot;repozytorium jest w trakcie migracji&quot;</span><span class="p">,</span><span class="nt">&quot;owner&quot;</span><span class="p">:</span><span class="s2">&quot;platform-team&quot;</span><span class="p">,</span><span class="nt">&quot;expires&quot;</span><span class="p">:</span><span class="s2">&quot;2026-09-30&quot;</span><span class="p">}}</span>
-</code></pre></div>
-<p>Pełny kontrakt joba, template'u <code>.dyscypline</code>, zmiennych i raportu standardu opisuje dokument <a href="../standard_check_job.html">Definicja joba weryfikującego</a>.</p>
-<h2 id="template-dyscypline">Template <code>.dyscypline</code><a class="headerlink" href="#template-dyscypline" title="Permanent link">&para;</a></h2>
-<p>Template <code>.dyscypline</code> jest wspólną bazą dla jobów standardów. Odpowiada za:</p>
+<p>Job standardu:</p>
 <ul>
-<li>logowanie do GitLab przez <code>glab</code>,</li>
-<li>pobranie repozytorium dyscypliny wskazanego w <code>discipline.yaml</code>,</li>
-<li>skopiowanie narzędzi <code>bin/</code> z pobranej wersji dyscypliny,</li>
-<li>sprawdzenie, czy dla <code>STD_ID</code> istnieje aktywne odstępstwo,</li>
-<li>zapis raportu <code>results/{STD_ID}.json</code>,</li>
-<li>wystawienie artefaktu <code>results/</code>,</li>
-<li>wypisanie linku do dokumentacji standardu.</li>
+<li>checkoutuje repozytorium aplikacji,</li>
+<li>checkoutuje zadeklarowaną wersję dyscypliny,</li>
+<li>checkoutuje repozytorium procesu,</li>
+<li>kopiuje narzędzia <code>bin/</code>,</li>
+<li>sprawdza aktywne odstępstwo dla <code>STD_ID</code>,</li>
+<li>uruchamia <code>bin/checks</code>,</li>
+<li>zapisuje <code>results/{STD_ID}.json</code>,</li>
+<li>publikuje raport jako artifact.</li>
 </ul>
-<p>Aktywne odstępstwo kończy job kodem <code>101</code>. Template dopuszcza:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="nt">allow_failure</span><span class="p">:</span>
-<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="w">  </span><span class="nt">exit_codes</span><span class="p">:</span>
-<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">101</span>
-<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">120</span>
+<h2 id="odstepstwa">Odstępstwa<a class="headerlink" href="#odstepstwa" title="Permanent link">&para;</a></h2>
+<p>Job standardu sprawdza <code>spec.exceptions[]</code> w <code>discipline.yaml</code>.</p>
+<p>Jeżeli istnieje aktywne odstępstwo dla <code>STD_ID</code>, job zapisuje raport:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="p">{</span><span class="nt">&quot;key&quot;</span><span class="p">:</span><span class="s2">&quot;STD-REPO-001&quot;</span><span class="p">,</span><span class="nt">&quot;status&quot;</span><span class="p">:</span><span class="s2">&quot;waived&quot;</span><span class="p">,</span><span class="nt">&quot;exception&quot;</span><span class="p">:{</span><span class="nt">&quot;check&quot;</span><span class="p">:</span><span class="s2">&quot;STD-REPO-001&quot;</span><span class="p">,</span><span class="nt">&quot;reason&quot;</span><span class="p">:</span><span class="s2">&quot;migration&quot;</span><span class="p">,</span><span class="nt">&quot;owner&quot;</span><span class="p">:</span><span class="s2">&quot;platform-team&quot;</span><span class="p">,</span><span class="nt">&quot;expires&quot;</span><span class="p">:</span><span class="s2">&quot;2026-09-30&quot;</span><span class="p">}}</span>
 </code></pre></div>
-<p>Kod <code>101</code> oznacza aktywne odstępstwo. Kod <code>120</code> oznacza brak albo niezaimplementowany check. Oba przypadki są raportowane, ale nie są interpretowane jako zwykły sukces checka.</p>
-<p>Jeżeli <code>expires</code> w odstępstwie jest wcześniejsze niż bieżąca data UTC, odstępstwo jest ignorowane i check uruchamia się normalnie.</p>
+<p>Jeżeli <code>expires</code> jest wcześniejsze niż bieżąca data UTC, odstępstwo jest ignorowane i check uruchamia się normalnie.</p>
+<p>Aktywne odstępstwo nie oznacza zwykłego sukcesu. Jest raportowane jako <code>waived</code>, a agregator kończy wynik jako <code>pass_with_waivers</code>.</p>
+<h2 id="status-joba-standardu">Status joba standardu<a class="headerlink" href="#status-joba-standardu" title="Permanent link">&para;</a></h2>
+<p>Job standardu zawsze próbuje najpierw zapisać i wysłać raport:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Upload standard report</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="w">  </span><span class="nt">if</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">always()</span>
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="w">  </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/upload-artifact@v7</span>
+</code></pre></div>
+<p>Jeżeli check zwrócił <code>fail</code> i nie ma aktywnego odstępstwa, ostatni krok oznacza job jako failed:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Fail standard job</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="w">  </span><span class="nt">if</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">always() &amp;&amp; steps.check.outputs.status == &#39;fail&#39; &amp;&amp; steps.waiver.outputs.status != &#39;active&#39;</span>
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="w">  </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">exit 1</span>
+</code></pre></div>
+<p>Dzięki temu wynik pojedynczego standardu jest czerwony w GitHub Actions, ale raport <code>results/{STD_ID}.json</code> nadal jest dostępny dla agregatora.</p>
 <h2 id="agregacja-wynikow">Agregacja wyników<a class="headerlink" href="#agregacja-wynikow" title="Permanent link">&para;</a></h2>
 <p>Job:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>🪬 Eye discipline:Verify discipline standards
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>🪬 Eye discipline:Verify discipline standards
 </code></pre></div>
-<p>działa w stage'u <code>tests</code>. Pobiera agregator z repozytorium dyscypliny:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="nv">encoded_project</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">DISCIPLINE_REPOSITORY</span><span class="p">//</span><span class="se">\/</span><span class="p">/%2F</span><span class="si">}</span><span class="s2">&quot;</span>
-<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="nv">encoded_path</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">EYE_DISCIPLINE_VERIFY_SCRIPT_PATH</span><span class="p">//</span><span class="se">\/</span><span class="p">/%2F</span><span class="si">}</span><span class="s2">&quot;</span>
-<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="nv">verify_url</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">CI_API_V4_URL</span><span class="si">}</span><span class="s2">/projects/</span><span class="si">${</span><span class="nv">encoded_project</span><span class="si">}</span><span class="s2">/repository/files/</span><span class="si">${</span><span class="nv">encoded_path</span><span class="si">}</span><span class="s2">/raw?ref=</span><span class="si">${</span><span class="nv">DISCIPLINE_REF</span><span class="si">}</span><span class="s2">&quot;</span>
+<p>pobiera artefakty <code>results-*</code>, scala je do katalogu <code>results/</code>, a następnie uruchamia:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>discipline_verify<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="w">  </span>--results-dir<span class="w"> </span>results<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a><span class="w">  </span>--discipline-file<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$DISCIPLINE_FILE</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a><span class="w">  </span>--output<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$CONFORMANCE_FILE</span><span class="s2">&quot;</span>
 </code></pre></div>
-<p>Następnie uruchamia:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>./.discipline_verify<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="w">  </span>--results-dir<span class="w"> </span>results<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="w">  </span>--discipline-file<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$DISCIPLINE_FILE</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="w">  </span>--output<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$CONFORMANCE_FILE</span><span class="s2">&quot;</span>
-</code></pre></div>
-<p>Skrypt czyta <code>results/*.json</code>, buduje <code>conformance.json</code> i wypisuje komunikat przeznaczony dla odbiorcy pipeline'u.</p>
+<p>Skrypt czyta <code>results/*.json</code>, buduje <code>conformance.json</code> i wypisuje komunikat dla odbiorcy pipeline'u.</p>
 <p>Możliwe statusy końcowe:</p>
 <table>
 <thead>
@@ -1893,7 +1950,7 @@
 <tr>
 <td><code>101</code></td>
 <td>nie ok, ale wszystkie niezgodności mają aktywne odstępstwo</td>
-<td>job jest <code>allow_failure</code>, pipeline może przejść</td>
+<td>workflow zamienia ten kod na sukces</td>
 </tr>
 <tr>
 <td><code>1</code></td>
@@ -1902,41 +1959,40 @@
 </tr>
 </tbody>
 </table>
-<p>Pipeline ma:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="nt">allow_failure</span><span class="p">:</span>
-<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="w">  </span><span class="nt">exit_codes</span><span class="p">:</span>
-<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">101</span>
+<p>W GitHub Actions nie ma <code>allow_failure</code> takiego jak w GitLab CI. Dlatego <code>verification-process.yml</code> przechwytuje kod <code>101</code> i kończy job sukcesem:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$verify_rc</span><span class="s2">&quot;</span><span class="w"> </span>-eq<span class="w"> </span><span class="m">101</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a><span class="w">  </span><span class="nb">exit</span><span class="w"> </span><span class="m">0</span>
+<a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a><span class="k">fi</span>
 </code></pre></div>
-<p>Dzięki temu aktywne odstępstwo jest widoczne w logu i w <code>conformance.json</code>, ale nie blokuje głównego pipeline'u. Brak odstępstwa dla realnej niezgodności kończy się kodem <code>1</code> i blokuje pipeline.</p>
-<p>Przykładowe komunikaty:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>✅ Bramka jakości dyscypliny: OK. Wszystkie wymagane standardy przeszły.
-</code></pre></div>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>⚠️ Bramka jakości dyscypliny: OK z odstępstwem. Niezgodności są objęte ważnym odstępstwem.
-<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a>- STD-REPO-002: odstępstwo do 2026-09-30; właściciel: platform-team; powód: repozytorium jest w trakcie migracji
-</code></pre></div>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>❌ Bramka jakości dyscypliny: BLOKADA. Wykryto niezgodności bez ważnego odstępstwa.
-<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a>- STD-REPO-003: results/STD-REPO-003.json
-</code></pre></div>
+<p>Realna niezgodność bez odstępstwa kończy job kodem <code>1</code>.</p>
 <h2 id="artefakty">Artefakty<a class="headerlink" href="#artefakty" title="Permanent link">&para;</a></h2>
 <p>Joby standardów zapisują:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a>results/
 </code></pre></div>
-<p>Job agregacji zapisuje:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>conformance.json
+<p>Artifact ma nazwę:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>results-{STD_ID}
 </code></pre></div>
-<p><code>conformance.json</code> jest artefaktem CI. Nie powinien być commitowany do repozytorium aplikacji, ponieważ opisuje wynik konkretnego uruchomienia pipeline'u.</p>
+<p>W aktualnej konfiguracji raporty standardów mają:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="nt">retention-days</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">90</span>
+</code></pre></div>
+<p>GitHub Actions nie wspiera artefaktów z retencją <code>never</code>. Retencja nie może przekroczyć limitu ustawionego dla repozytorium, organizacji albo enterprise.</p>
+<p>Job agregacji zapisuje:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a>conformance.json
+</code></pre></div>
+<p><code>conformance.json</code> jest artifactem CI. Nie powinien być commitowany do repozytorium aplikacji, ponieważ opisuje wynik konkretnego uruchomienia workflow.</p>
 <h2 id="minimalna-integracja">Minimalna integracja<a class="headerlink" href="#minimalna-integracja" title="Permanent link">&para;</a></h2>
 <p>Minimalna integracja w repozytorium aplikacji składa się z dwóch elementów:</p>
 <ol>
 <li>Plik <code>discipline.yaml</code>.</li>
-<li>Include centralnego pipeline'u:</li>
+<li>Workflow wywołujący reusable workflow:</li>
 </ol>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="nt">include</span><span class="p">:</span>
-<a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">project</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dev.rachuna/eye-of-discipline</span>
-<a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a><span class="w">    </span><span class="nt">file</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ci/gitlab/verification-process/.gitlab-ci.yml</span>
-<a id="__codelineno-22-4" name="__codelineno-22-4" href="#__codelineno-22-4"></a><span class="w">    </span><span class="nt">ref</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">main</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="nt">jobs</span><span class="p">:</span>
+<a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a><span class="w">  </span><span class="nt">discipline-verification</span><span class="p">:</span>
+<a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Eye discipline quality gate</span>
+<a id="__codelineno-24-4" name="__codelineno-24-4" href="#__codelineno-24-4"></a><span class="w">    </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">eye-of-discipline/eye-of-discipline/.github/workflows/verification-process.yml@main</span>
+<a id="__codelineno-24-5" name="__codelineno-24-5" href="#__codelineno-24-5"></a><span class="w">    </span><span class="nt">secrets</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">inherit</span>
 </code></pre></div>
-<p>Repozytorium aplikacji nie musi przenosić <code>cheks_jobs.yml</code>, <code>discipline_validate</code> ani <code>discipline_verify</code>. Są one częścią wersjonowanego procesu w repozytorium dyscypliny.</p>
+<p>Repozytorium aplikacji nie musi przenosić <code>checks-jobs.yml</code>, <code>discipline_validate</code> ani <code>discipline_verify</code>. Są one częścią wersjonowanego procesu w repozytorium dyscypliny.</p>
 
 
 

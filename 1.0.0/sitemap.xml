@@ -190,6 +190,20 @@
         <xhtml:link rel="alternate" hreflang="pl" href="https://eye-of-discipline.github.io/1.0.0pl/docs/verification_process/standard_check_job.html"/>
     </url>
     <url>
+        <loc>https://eye-of-discipline.github.io/1.0.0/docs/verification_process/verification_process.html</loc>
+        <lastmod>2026-06-24</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://eye-of-discipline.github.io/1.0.0/docs/verification_process/verification_process.html"/>
+        <xhtml:link rel="alternate" hreflang="pl" href="https://eye-of-discipline.github.io/1.0.0pl/docs/verification_process/verification_process.html"/>
+    </url>
+    <url>
+        <loc>https://eye-of-discipline.github.io/1.0.0/docs/verification_process/github/verification_process.html</loc>
+        <lastmod>2026-06-24</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://eye-of-discipline.github.io/1.0.0/docs/verification_process/github/verification_process.html"/>
+        <xhtml:link rel="alternate" hreflang="pl" href="https://eye-of-discipline.github.io/1.0.0pl/docs/verification_process/github/verification_process.html"/>
+    </url>
+    <url>
         <loc>https://eye-of-discipline.github.io/1.0.0/docs/verification_process/gitlab/verification_process.html</loc>
         <lastmod>2026-06-24</lastmod>
         <changefreq>daily</changefreq>
@@ -397,6 +411,20 @@
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="pl" href="https://eye-of-discipline.github.io/1.0.0/pl/docs/verification_process/standard_check_job.html"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://eye-of-discipline.github.io/1.0.0docs/verification_process/standard_check_job.html"/>
+    </url>
+    <url>
+        <loc>https://eye-of-discipline.github.io/1.0.0/pl/docs/verification_process/verification_process.html</loc>
+        <lastmod>2026-06-24</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="pl" href="https://eye-of-discipline.github.io/1.0.0/pl/docs/verification_process/verification_process.html"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://eye-of-discipline.github.io/1.0.0docs/verification_process/verification_process.html"/>
+    </url>
+    <url>
+        <loc>https://eye-of-discipline.github.io/1.0.0/pl/docs/verification_process/github/verification_process.html</loc>
+        <lastmod>2026-06-24</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="pl" href="https://eye-of-discipline.github.io/1.0.0/pl/docs/verification_process/github/verification_process.html"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://eye-of-discipline.github.io/1.0.0docs/verification_process/github/verification_process.html"/>
     </url>
     <url>
         <loc>https://eye-of-discipline.github.io/1.0.0/pl/docs/verification_process/gitlab/verification_process.html</loc>
