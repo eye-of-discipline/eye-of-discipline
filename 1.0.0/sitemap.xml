@@ -50,13 +50,6 @@
         <xhtml:link rel="alternate" hreflang="pl" href="https://eye-of-discipline.github.io/1.0.0pl/bin/tools/discipline_create_standard.html"/>
     </url>
     <url>
-        <loc>https://eye-of-discipline.github.io/1.0.0/docs/creative_process.html</loc>
-        <lastmod>2026-06-24</lastmod>
-        <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="en" href="https://eye-of-discipline.github.io/1.0.0/docs/creative_process.html"/>
-        <xhtml:link rel="alternate" hreflang="pl" href="https://eye-of-discipline.github.io/1.0.0pl/docs/creative_process.html"/>
-    </url>
-    <url>
         <loc>https://eye-of-discipline.github.io/1.0.0/docs/glossary.html</loc>
         <lastmod>2026-06-24</lastmod>
         <changefreq>daily</changefreq>
@@ -127,6 +120,34 @@
         <xhtml:link rel="alternate" hreflang="pl" href="https://eye-of-discipline.github.io/1.0.0pl/docs/creating_standards/writing_standard_documentation.html"/>
     </url>
     <url>
+        <loc>https://eye-of-discipline.github.io/1.0.0/docs/creative_process/creative_process.html</loc>
+        <lastmod>2026-06-24</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://eye-of-discipline.github.io/1.0.0/docs/creative_process/creative_process.html"/>
+        <xhtml:link rel="alternate" hreflang="pl" href="https://eye-of-discipline.github.io/1.0.0pl/docs/creative_process/creative_process.html"/>
+    </url>
+    <url>
+        <loc>https://eye-of-discipline.github.io/1.0.0/docs/creative_process/pipeline.html</loc>
+        <lastmod>2026-06-24</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://eye-of-discipline.github.io/1.0.0/docs/creative_process/pipeline.html"/>
+        <xhtml:link rel="alternate" hreflang="pl" href="https://eye-of-discipline.github.io/1.0.0pl/docs/creative_process/pipeline.html"/>
+    </url>
+    <url>
+        <loc>https://eye-of-discipline.github.io/1.0.0/docs/creative_process/github/creative-process.html</loc>
+        <lastmod>2026-06-24</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://eye-of-discipline.github.io/1.0.0/docs/creative_process/github/creative-process.html"/>
+        <xhtml:link rel="alternate" hreflang="pl" href="https://eye-of-discipline.github.io/1.0.0pl/docs/creative_process/github/creative-process.html"/>
+    </url>
+    <url>
+        <loc>https://eye-of-discipline.github.io/1.0.0/docs/creative_process/gitlab/creative-process.html</loc>
+        <lastmod>2026-06-24</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://eye-of-discipline.github.io/1.0.0/docs/creative_process/gitlab/creative-process.html"/>
+        <xhtml:link rel="alternate" hreflang="pl" href="https://eye-of-discipline.github.io/1.0.0pl/docs/creative_process/gitlab/creative-process.html"/>
+    </url>
+    <url>
         <loc>https://eye-of-discipline.github.io/1.0.0/standards/repository/STD-REPO-001/index.html</loc>
         <lastmod>2026-06-24</lastmod>
         <changefreq>daily</changefreq>
@@ -187,13 +208,6 @@
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="pl" href="https://eye-of-discipline.github.io/1.0.0/pl/bin/tools/discipline_create_standard.html"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://eye-of-discipline.github.io/1.0.0bin/tools/discipline_create_standard.html"/>
-    </url>
-    <url>
-        <loc>https://eye-of-discipline.github.io/1.0.0/pl/docs/creative_process.html</loc>
-        <lastmod>2026-06-24</lastmod>
-        <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="pl" href="https://eye-of-discipline.github.io/1.0.0/pl/docs/creative_process.html"/>
-        <xhtml:link rel="alternate" hreflang="en" href="https://eye-of-discipline.github.io/1.0.0docs/creative_process.html"/>
     </url>
     <url>
         <loc>https://eye-of-discipline.github.io/1.0.0/pl/docs/glossary.html</loc>
@@ -264,6 +278,34 @@
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="pl" href="https://eye-of-discipline.github.io/1.0.0/pl/docs/creating_standards/writing_standard_documentation.html"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://eye-of-discipline.github.io/1.0.0docs/creating_standards/writing_standard_documentation.html"/>
+    </url>
+    <url>
+        <loc>https://eye-of-discipline.github.io/1.0.0/pl/docs/creative_process/creative_process.html</loc>
+        <lastmod>2026-06-24</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="pl" href="https://eye-of-discipline.github.io/1.0.0/pl/docs/creative_process/creative_process.html"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://eye-of-discipline.github.io/1.0.0docs/creative_process/creative_process.html"/>
+    </url>
+    <url>
+        <loc>https://eye-of-discipline.github.io/1.0.0/pl/docs/creative_process/pipeline.html</loc>
+        <lastmod>2026-06-24</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="pl" href="https://eye-of-discipline.github.io/1.0.0/pl/docs/creative_process/pipeline.html"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://eye-of-discipline.github.io/1.0.0docs/creative_process/pipeline.html"/>
+    </url>
+    <url>
+        <loc>https://eye-of-discipline.github.io/1.0.0/pl/docs/creative_process/github/creative-process.html</loc>
+        <lastmod>2026-06-24</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="pl" href="https://eye-of-discipline.github.io/1.0.0/pl/docs/creative_process/github/creative-process.html"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://eye-of-discipline.github.io/1.0.0docs/creative_process/github/creative-process.html"/>
+    </url>
+    <url>
+        <loc>https://eye-of-discipline.github.io/1.0.0/pl/docs/creative_process/gitlab/creative-process.html</loc>
+        <lastmod>2026-06-24</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="pl" href="https://eye-of-discipline.github.io/1.0.0/pl/docs/creative_process/gitlab/creative-process.html"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://eye-of-discipline.github.io/1.0.0docs/creative_process/gitlab/creative-process.html"/>
     </url>
     <url>
         <loc>https://eye-of-discipline.github.io/1.0.0/pl/standards/repository/STD-REPO-001/index.html</loc>
