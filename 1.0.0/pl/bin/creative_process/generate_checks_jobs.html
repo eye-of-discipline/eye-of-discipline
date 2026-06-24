@@ -24,7 +24,7 @@
     
     
       
-        <title>Przygotowanie jobów weryfikujących - Eye of Discipline</title>
+        <title>Generator jobów weryfikujących - Eye of Discipline</title>
       
     
     
@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#przygotowanie-jobow-weryfikujacych" class="md-skip">
+        <a href="#generator-jobow-weryfikujacych" class="md-skip">
           Przejdź do treści
         </a>
       
@@ -117,7 +117,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Przygotowanie jobów weryfikujących
+              Generator jobów weryfikujących
             
           </span>
         </div>
@@ -733,7 +733,7 @@
           
   
   <span class="md-ellipsis">
-    Przygotowanie jobów weryfikujących
+    Generator jobów weryfikujących
   </span>
   
 
@@ -744,7 +744,7 @@
         
   
   <span class="md-ellipsis">
-    Przygotowanie jobów weryfikujących
+    Generator jobów weryfikujących
   </span>
   
 
@@ -784,9 +784,36 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#uzycie" class="md-nav__link">
+  <a href="#format-wejscia" class="md-nav__link">
     <span class="md-ellipsis">
-      Użycie
+      Format wejścia
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#uzycie-domyslne" class="md-nav__link">
+    <span class="md-ellipsis">
+      Użycie domyślne
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#opcje" class="md-nav__link">
+    <span class="md-ellipsis">
+      Opcje
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#wynik" class="md-nav__link">
+    <span class="md-ellipsis">
+      Wynik
     </span>
   </a>
   
@@ -1369,9 +1396,36 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#uzycie" class="md-nav__link">
+  <a href="#format-wejscia" class="md-nav__link">
     <span class="md-ellipsis">
-      Użycie
+      Format wejścia
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#uzycie-domyslne" class="md-nav__link">
+    <span class="md-ellipsis">
+      Użycie domyślne
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#opcje" class="md-nav__link">
+    <span class="md-ellipsis">
+      Opcje
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#wynik" class="md-nav__link">
+    <span class="md-ellipsis">
+      Wynik
     </span>
   </a>
   
@@ -1412,42 +1466,108 @@
   
 
 
-<h1 id="przygotowanie-jobow-weryfikujacych">Przygotowanie jobów weryfikujących<a class="headerlink" href="#przygotowanie-jobow-weryfikujacych" title="Permanent link">&para;</a></h1>
-<p><code>bin/creative_process/generate_checks_jobs</code> jest adapterem procesu wytwórczego. Nie generuje samodzielnie konfiguracji GitLab CI, tylko uruchamia właściwy generator:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>bin/creative_process/discipline_generate_checks_jobs
+<h1 id="generator-jobow-weryfikujacych">Generator jobów weryfikujących<a class="headerlink" href="#generator-jobow-weryfikujacych" title="Permanent link">&para;</a></h1>
+<p><code>bin/creative_process/generate_checks_jobs</code> buduje listę jobów standardów publikowaną razem z procesem weryfikacji GitLab CI. Skrypt czyta definicje jobów utrzymywane przy standardach i skleja je w jeden plik:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>ci/gitlab/verification-process/cheks_jobs.yml
 </code></pre></div>
-<p>Rozdzielenie tych odpowiedzialności jest celowe:</p>
-<ul>
-<li><code>bin/creative_process/discipline_generate_checks_jobs</code> zawiera logikę wyszukiwania i łączenia definicji jobów,</li>
-<li><code>bin/creative_process/generate_checks_jobs</code> określa, kiedy generator ma zostać użyty podczas przygotowania wersji,</li>
-<li><code>bin/prepare_build</code> pozostaje orkiestratorem całego procesu.</li>
-</ul>
+<p>Ten plik jest używany przez centralny pipeline:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nt">include</span><span class="p">:</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span><span class="nt">local</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ci/gitlab/verification-process/cheks_jobs.yml</span>
+</code></pre></div>
+<p>Dzięki temu repozytoria aplikacji podpinające <code>ci/gitlab/verification-process/.gitlab-ci.yml</code> dostają aktualny zestaw jobów standardów jako bramki jakości.</p>
 <h2 id="miejsce-w-procesie">Miejsce w procesie<a class="headerlink" href="#miejsce-w-procesie" title="Permanent link">&para;</a></h2>
 <p>Skrypt jest uruchamiany przez <code>bin/prepare_build</code> po aktualizacji metadanych standardów:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>standards/**/.gitlab-ci.yml
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>              |
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>              v
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>bin/creative_process/discipline_generate_checks_jobs
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>              |
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>              v
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>ci/gitlab/verify/cheks_jobs.yml
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>standards/**/.gitlab-ci.yml
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>              |
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>              v
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>bin/creative_process/generate_checks_jobs
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>              |
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>              v
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>ci/gitlab/verification-process/cheks_jobs.yml
 </code></pre></div>
 <p>Każdy plik <code>.gitlab-ci.yml</code> standardu definiuje jego własny job weryfikujący. Generator skleja te definicje w jeden plik, który może zostać dołączony przez pipeline procesu weryfikacji.</p>
 <h2 id="zachowanie">Zachowanie<a class="headerlink" href="#zachowanie" title="Permanent link">&para;</a></h2>
-<p>Jeżeli <code>bin/creative_process/discipline_generate_checks_jobs</code> istnieje, adapter:</p>
+<p>Skrypt:</p>
 <ol>
-<li>nadaje mu uprawnienie wykonywania,</li>
-<li>uruchamia generator,</li>
-<li>przekazuje jego kod wyjścia do <code>prepare_build</code>.</li>
+<li>wyszukuje pliki <code>standards/**/.gitlab-ci.yml</code>,</li>
+<li>waliduje, że każdy plik definiuje dokładnie jeden top-level job,</li>
+<li>usuwa początkowy separator YAML <code>---</code> z plików źródłowych,</li>
+<li>dopisuje komentarz <code># Source: ...</code> przed każdą definicją,</li>
+<li>zapisuje wynik do <code>ci/gitlab/verification-process/cheks_jobs.yml</code>.</li>
 </ol>
-<p>Jeżeli generator nie istnieje, krok jest pomijany z komunikatem i kończy się kodem <code>0</code>. Dzięki temu <code>prepare_build</code> może być użyty również w repozytorium, które nie publikuje jobów weryfikujących.</p>
-<h2 id="uzycie">Użycie<a class="headerlink" href="#uzycie" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>bin/creative_process/generate_checks_jobs
+<p>Jeżeli nie znajdzie żadnych jobów standardów, tworzy poprawny plik z komentarzem:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nn">---</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="c1"># Generated by bin/creative_process/generate_checks_jobs. Do not edit manually.</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="c1"># Each standards/**/.gitlab-ci.yml file should define one standard job.</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="c1"># No standard jobs found.</span>
+</code></pre></div>
+<h2 id="format-wejscia">Format wejścia<a class="headerlink" href="#format-wejscia" title="Permanent link">&para;</a></h2>
+<p>Każdy standard powinien mieć własny plik:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>standards/{domena}/{STD_ID}/.gitlab-ci.yml
+</code></pre></div>
+<p>Plik musi definiować dokładnie jeden job standardu, na przykład:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nn">---</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="nt">👁️ Eye discipline:STD-REPO-001</span><span class="p">:</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">  </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">registry.gitlab.com/dev.rachuna/artifacts/containers/python:1.2.1</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">  </span><span class="nt">extends</span><span class="p">:</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">.dyscypline</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="w">  </span><span class="nt">variables</span><span class="p">:</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="w">    </span><span class="nt">STD_DOMAIN</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">repozytorium</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="w">    </span><span class="nt">STD_ID</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">STD-REPO-001</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="w">    </span><span class="nt">DOCS_MD_FILE_PATH</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">standards/repozytorium/STD-REPO-001/README.md</span>
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="w">    </span><span class="nt">STD_CHECK_SCRIPT</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/tmp/discipline/standards/$STD_DOMAIN/$STD_ID/bin/checks</span>
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="w">  </span><span class="nt">script</span><span class="p">:</span>
+<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bash &quot;$STD_CHECK_SCRIPT&quot;</span>
+</code></pre></div>
+<p>Zasada jest celowa:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>jeden standard = jeden job = jeden raport results/{STD_ID}.json
+</code></pre></div>
+<h2 id="uzycie-domyslne">Użycie domyślne<a class="headerlink" href="#uzycie-domyslne" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>bin/creative_process/generate_checks_jobs
+</code></pre></div>
+<p>Wskazanie innego katalogu standardów:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>bin/creative_process/generate_checks_jobs<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">  </span>--standards-dir<span class="w"> </span>path/to/standards
+</code></pre></div>
+<p>Wskazanie innego pliku wyjściowego:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>bin/creative_process/generate_checks_jobs<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="w">  </span>--output<span class="w"> </span>path/to/cheks_jobs.yml
 </code></pre></div>
 <p>Pomoc:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>bin/creative_process/generate_checks_jobs<span class="w"> </span>--help
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>bin/creative_process/generate_checks_jobs<span class="w"> </span>--help
 </code></pre></div>
-<p>Szczegóły formatu wejścia i walidacji opisuje dokumentacja <a href="discipline_generate_checks_jobs.md">generatora jobów standardów</a>.</p>
+<h2 id="opcje">Opcje<a class="headerlink" href="#opcje" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Opcja</th>
+<th>Domyślnie</th>
+<th>Znaczenie</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-s</code>, <code>--standards-dir</code></td>
+<td><code>standards</code></td>
+<td>katalog standardów</td>
+</tr>
+<tr>
+<td><code>-o</code>, <code>--output</code></td>
+<td><code>ci/gitlab/verification-process/cheks_jobs.yml</code></td>
+<td>plik wyjściowy z jobami standardów</td>
+</tr>
+<tr>
+<td><code>-h</code>, <code>--help</code></td>
+<td></td>
+<td>wyświetla pomoc</td>
+</tr>
+</tbody>
+</table>
+<h2 id="wynik">Wynik<a class="headerlink" href="#wynik" title="Permanent link">&para;</a></h2>
+<p>Po poprawnym wykonaniu skrypt wypisuje:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>Generated ci/gitlab/verification-process/cheks_jobs.yml
+</code></pre></div>
+<p>Wygenerowany plik nie powinien być edytowany ręcznie. Źródłem prawdy pozostają pliki <code>standards/**/.gitlab-ci.yml</code>.</p>
 
 
 

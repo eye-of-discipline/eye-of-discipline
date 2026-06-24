@@ -15,6 +15,20 @@
         <xhtml:link rel="alternate" hreflang="pl" href="https://eye-of-discipline.github.io/1.0.0pl/CHANGELOG.html"/>
     </url>
     <url>
+        <loc>https://eye-of-discipline.github.io/1.0.0/CODE_OF_CONDUCT.html</loc>
+        <lastmod>2026-06-24</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://eye-of-discipline.github.io/1.0.0/CODE_OF_CONDUCT.html"/>
+        <xhtml:link rel="alternate" hreflang="pl" href="https://eye-of-discipline.github.io/1.0.0pl/CODE_OF_CONDUCT.html"/>
+    </url>
+    <url>
+        <loc>https://eye-of-discipline.github.io/1.0.0/CONTRIBUTING.html</loc>
+        <lastmod>2026-06-24</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://eye-of-discipline.github.io/1.0.0/CONTRIBUTING.html"/>
+        <xhtml:link rel="alternate" hreflang="pl" href="https://eye-of-discipline.github.io/1.0.0pl/CONTRIBUTING.html"/>
+    </url>
+    <url>
         <loc>https://eye-of-discipline.github.io/1.0.0/index.html</loc>
         <lastmod>2026-06-24</lastmod>
         <changefreq>daily</changefreq>
@@ -202,6 +216,20 @@
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="pl" href="https://eye-of-discipline.github.io/1.0.0/pl/CHANGELOG.html"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://eye-of-discipline.github.io/1.0.0CHANGELOG.html"/>
+    </url>
+    <url>
+        <loc>https://eye-of-discipline.github.io/1.0.0/pl/CODE_OF_CONDUCT.html</loc>
+        <lastmod>2026-06-24</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="pl" href="https://eye-of-discipline.github.io/1.0.0/pl/CODE_OF_CONDUCT.html"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://eye-of-discipline.github.io/1.0.0CODE_OF_CONDUCT.html"/>
+    </url>
+    <url>
+        <loc>https://eye-of-discipline.github.io/1.0.0/pl/CONTRIBUTING.html</loc>
+        <lastmod>2026-06-24</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="pl" href="https://eye-of-discipline.github.io/1.0.0/pl/CONTRIBUTING.html"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://eye-of-discipline.github.io/1.0.0CONTRIBUTING.html"/>
     </url>
     <url>
         <loc>https://eye-of-discipline.github.io/1.0.0/pl/index.html</loc>

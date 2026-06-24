@@ -724,7 +724,7 @@
         
   
   <span class="md-ellipsis">
-    Przygotowanie jobów weryfikujących
+    Generator jobów weryfikujących
   </span>
   
 
@@ -1572,7 +1572,7 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="l l-Scalar l-Scalar-Plain">set-version</span>
 </code></pre></div>
 <p>Obraz kontenera:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>ghcr.io/eye-of-discipline/image-semantic-release:1.0.0
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>ghcr.io/eye-of-discipline/image-semantic-release:1.1.0
 </code></pre></div>
 <p>Job uruchamia się tylko dla pushy do gałęzi:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nt">if</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">github.event_name == &#39;push&#39; &amp;&amp; !startsWith(github.ref, &#39;refs/tags/&#39;)</span>
@@ -1664,7 +1664,7 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="l l-Scalar l-Scalar-Plain">publish-version</span>
 </code></pre></div>
 <p>Obraz kontenera:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>ghcr.io/eye-of-discipline/image-semantic-release:1.0.0
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>ghcr.io/eye-of-discipline/image-semantic-release:1.1.0
 </code></pre></div>
 <p>Job zależy od:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="nt">needs</span><span class="p">:</span>
