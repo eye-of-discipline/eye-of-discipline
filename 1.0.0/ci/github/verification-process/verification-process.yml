@@ -1,0 +1,16 @@
+---
+name: Discipline verification
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  discipline-verification:
+    name: Eye discipline quality gate
+    uses: eye-of-discipline/eye-of-discipline/.github/workflows/verification-process.yml@main
+    secrets: inherit

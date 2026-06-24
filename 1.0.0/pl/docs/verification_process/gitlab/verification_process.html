@@ -1,0 +1,1985 @@
+
+<!doctype html>
+<html lang="pl" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Managing your discipline policies">
+      
+      
+      
+        <link rel="canonical" href="https://eye-of-discipline.github.io/1.0.0/pl/docs/verification_process/gitlab/verification_process.html">
+      
+      
+        <link rel="prev" href="../../../bin/verification_process/discipline_verify.html">
+      
+      
+        <link rel="next" href="../../../CHANGELOG.html">
+      
+      
+      <link rel="icon" href="../../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.0, mkdocs-material-9.5.28">
+    
+    
+      
+        <title>GitLab CI jako bramka jakości dyscypliny - Eye of Discipline</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../assets/stylesheets/main.6543a935.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+        <script src="https://unpkg.com/iframe-worker/shim"></script>
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#gitlab-ci-jako-bramka-jakosci-dyscypliny" class="md-skip">
+          Przejdź do treści
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden>
+        
+      </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Nagłówek">
+    <a href="../../../index.html" title="Eye of Discipline" class="md-header__button md-logo" aria-label="Eye of Discipline" data-md-component="logo">
+      
+  <img src="../../../../docs/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Eye of Discipline
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              GitLab CI jako bramka jakości dyscypliny
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5c-.84 0-1.65.15-2.39.42L12 2M3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29L3.34 7m.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14L3.36 17M20.65 7l-1.77 3.79a7.023 7.023 0 0 0-2.38-4.15l4.15.36m-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29L20.64 17M12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44L12 22Z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="dark mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3 3.19.09m3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95 2.06.05m-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31Z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var media,input,key,value,palette=__md_get("__palette");if(palette&&palette.color){"(prefers-color-scheme)"===palette.color.media&&(media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']"),palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent"));for([key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+      <div class="md-header__option">
+  <div class="md-select">
+    
+    <button class="md-header__button md-icon" aria-label="Wybierz język">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m12.87 15.07-2.54-2.51.03-.03A17.52 17.52 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11.76-2.04M18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12m-2.62 7 1.62-4.33L19.12 17h-3.24Z"/></svg>
+    </button>
+    <div class="md-select__inner">
+      <ul class="md-select__list">
+        
+          <li class="md-select__item">
+            <a href="../../../../docs/verification_process/gitlab/verification_process.html" hreflang="en" class="md-select__link">
+              English
+            </a>
+          </li>
+        
+          <li class="md-select__item">
+            <a href="verification_process.html" hreflang="pl" class="md-select__link">
+              Polski
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</div>
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Szukaj" placeholder="Szukaj" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Szukaj">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Wyczyść" aria-label="Wyczyść" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicjowanie wyszukiwania
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/eye-of-discipline/eye-of-discipline" title="Przejdź do repozytorium" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    eye-of-discipline
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Zakładki" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../../index.html" class="md-tabs__link">
+          
+  
+  Strona główna
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../standards/repository/STD-REPO-001/index.html" class="md-tabs__link">
+          
+  
+  Zasady Dyscypliny
+
+        </a>
+      </li>
+    
+  
+
+    
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../tags.html" class="md-tabs__link">
+        
+  
+    
+  
+  Tags
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Nawigacja" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../index.html" title="Eye of Discipline" class="md-nav__button md-logo" aria-label="Eye of Discipline" data-md-component="logo">
+      
+  <img src="../../../../docs/logo.png" alt="logo">
+
+    </a>
+    Eye of Discipline
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/eye-of-discipline/eye-of-discipline" title="Przejdź do repozytorium" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    eye-of-discipline
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_1" id="__nav_1_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Strona główna
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_1">
+            <span class="md-nav__icon md-icon"></span>
+            Strona główna
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../index.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Eye of Discipline
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../roles.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Role
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../glossary.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Słownik pojęć
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_1_4" id="__nav_1_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Tworzenie norm
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_1_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1_4">
+            <span class="md-nav__icon md-icon"></span>
+            Tworzenie norm
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../creating_standards/how_to_write_standards.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Jak pisać normy?
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../creating_standards/standard_domain_documentation.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Tworzenie domeny dokumentacji
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../creating_standards/bcp14_standard_language.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Język normatywny BCP 14
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../creating_standards/writing_standard_documentation.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Pisanie dokumentacji
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../creating_standards/writing_standard_check.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Pisanie checka standardu
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_1_5" id="__nav_1_5_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Proces wytwórczy standardów
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_1_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1_5">
+            <span class="md-nav__icon md-icon"></span>
+            Proces wytwórczy standardów
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../creative_process/creative_process.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Idea procesu wytwórczego standardów
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../bin/tools/discipline_create_domain.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Generator domen dyscypliny
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../bin/tools/discipline_create_standard.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Generator standardu
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../bin/creative_process/generate_checks_jobs.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Przygotowanie jobów weryfikujących
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../bin/creative_process/stamp_standard_metadata.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Aktualizacja metadanych standardów
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_5_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_1_5_6" id="__nav_1_5_6_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Przykładowy pipeline
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_1_5_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1_5_6">
+            <span class="md-nav__icon md-icon"></span>
+            Przykładowy pipeline
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../creative_process/pipeline.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Pipeline procesu twórczego
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../creative_process/github/creative-process.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Github Pipeline Creative Process
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../creative_process/gitlab/creative-process.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Gitlab Pipeline Creative Process
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_6" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_1_6" id="__nav_1_6_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Proces weryfikujący stosowanie standardów
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_1_6_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_1_6">
+            <span class="md-nav__icon md-icon"></span>
+            Proces weryfikujący stosowanie standardów
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../verification_process.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Idea procesu weryfikującego
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../bin/verification_process/discipline_validate.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Walidacja deklaracji dyscypliny
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../standard_check_job.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Definicja joba weryfikującego
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../bin/verification_process/discipline_verify.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Ocena zgodności z dyscypliną
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_6_5" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_1_6_5" id="__nav_1_6_5_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Przykładowy pipeline
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_1_6_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_1_6_5">
+            <span class="md-nav__icon md-icon"></span>
+            Przykładowy pipeline
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    GitLab CI jako bramka jakości dyscypliny
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="verification_process.html" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    GitLab CI jako bramka jakości dyscypliny
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Spis treści">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Spis treści
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#miejsce-w-gownym-ci" class="md-nav__link">
+    <span class="md-ellipsis">
+      Miejsce w głównym CI
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#wymagane-pliki-w-repozytorium-aplikacji" class="md-nav__link">
+    <span class="md-ellipsis">
+      Wymagane pliki w repozytorium aplikacji
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#zmienne-pipelineu" class="md-nav__link">
+    <span class="md-ellipsis">
+      Zmienne pipeline'u
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#struktura-procesu" class="md-nav__link">
+    <span class="md-ellipsis">
+      Struktura procesu
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#przykadowy-pipeline" class="md-nav__link">
+    <span class="md-ellipsis">
+      Przykładowy pipeline
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#walidacja-deklaracji" class="md-nav__link">
+    <span class="md-ellipsis">
+      Walidacja deklaracji
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#joby-standardow" class="md-nav__link">
+    <span class="md-ellipsis">
+      Joby standardów
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#template-dyscypline" class="md-nav__link">
+    <span class="md-ellipsis">
+      Template .dyscypline
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#agregacja-wynikow" class="md-nav__link">
+    <span class="md-ellipsis">
+      Agregacja wyników
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bramka-jakosci" class="md-nav__link">
+    <span class="md-ellipsis">
+      Bramka jakości
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#artefakty" class="md-nav__link">
+    <span class="md-ellipsis">
+      Artefakty
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#minimalna-integracja" class="md-nav__link">
+    <span class="md-ellipsis">
+      Minimalna integracja
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../CHANGELOG.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Changelog
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Zasady Dyscypliny
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Zasady Dyscypliny
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Repository
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            Repository
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../standards/repository/STD-REPO-001/index.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Struktura plików w repozytorium
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../CHANGELOG.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Changelog
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tags.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Tags
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Spis treści">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Spis treści
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#miejsce-w-gownym-ci" class="md-nav__link">
+    <span class="md-ellipsis">
+      Miejsce w głównym CI
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#wymagane-pliki-w-repozytorium-aplikacji" class="md-nav__link">
+    <span class="md-ellipsis">
+      Wymagane pliki w repozytorium aplikacji
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#zmienne-pipelineu" class="md-nav__link">
+    <span class="md-ellipsis">
+      Zmienne pipeline'u
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#struktura-procesu" class="md-nav__link">
+    <span class="md-ellipsis">
+      Struktura procesu
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#przykadowy-pipeline" class="md-nav__link">
+    <span class="md-ellipsis">
+      Przykładowy pipeline
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#walidacja-deklaracji" class="md-nav__link">
+    <span class="md-ellipsis">
+      Walidacja deklaracji
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#joby-standardow" class="md-nav__link">
+    <span class="md-ellipsis">
+      Joby standardów
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#template-dyscypline" class="md-nav__link">
+    <span class="md-ellipsis">
+      Template .dyscypline
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#agregacja-wynikow" class="md-nav__link">
+    <span class="md-ellipsis">
+      Agregacja wyników
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bramka-jakosci" class="md-nav__link">
+    <span class="md-ellipsis">
+      Bramka jakości
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#artefakty" class="md-nav__link">
+    <span class="md-ellipsis">
+      Artefakty
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#minimalna-integracja" class="md-nav__link">
+    <span class="md-ellipsis">
+      Minimalna integracja
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+  
+<nav class="md-tags" >
+  
+    
+    
+    
+      <span class="md-tag">documentation</span>
+    
+  
+    
+    
+    
+      <span class="md-tag">verification process</span>
+    
+  
+</nav>
+
+
+  
+  
+
+
+<h1 id="gitlab-ci-jako-bramka-jakosci-dyscypliny">GitLab CI jako bramka jakości dyscypliny<a class="headerlink" href="#gitlab-ci-jako-bramka-jakosci-dyscypliny" title="Permanent link">&para;</a></h1>
+<p>Plik <code>ci/gitlab/verification-process/.gitlab-ci.yml</code> jest centralnym pipeline'em weryfikacji dyscypliny dla GitLab CI. Repozytorium aplikacji nie powinno kopiować całego procesu do siebie. W głównym pipeline CI powinno podpiąć proces jako zewnętrzny include i potraktować go jako bramkę jakości.</p>
+<p>Najważniejszy element integracji:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nt">include</span><span class="p">:</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">project</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dev.rachuna/eye-of-discipline</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="nt">file</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ci/gitlab/verification-process/.gitlab-ci.yml</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">    </span><span class="nt">ref</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">main</span>
+</code></pre></div>
+<p>Taki include dodaje do pipeline'u aplikacji:</p>
+<ul>
+<li>walidację <code>discipline.yaml</code>,</li>
+<li>joby standardów wygenerowane z dyscypliny,</li>
+<li>agregację wyników do <code>conformance.json</code>,</li>
+<li>decyzję bramki jakości.</li>
+</ul>
+<h2 id="miejsce-w-gownym-ci">Miejsce w głównym CI<a class="headerlink" href="#miejsce-w-gownym-ci" title="Permanent link">&para;</a></h2>
+<p>Pipeline weryfikacji dyscypliny jest częścią głównego CI aplikacji. Nie zastępuje builda, testów jednostkowych ani deploymentu. Działa jako dodatkowa bramka jakości, która odpowiada na pytanie:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>czy repozytorium spełnia standardy zadeklarowanej wersji dyscypliny?
+</code></pre></div>
+<p>Minimalny przykład użycia w repozytorium aplikacji:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nt">stages</span><span class="p">:</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">prepare</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">validate</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tests</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">build</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">deployment</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="nt">include</span><span class="p">:</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">project</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dev.rachuna/eye-of-discipline</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="w">    </span><span class="nt">file</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ci/gitlab/verification-process/.gitlab-ci.yml</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="w">    </span><span class="nt">ref</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">main</span>
+</code></pre></div>
+<p>Jeżeli aplikacja ma własne stage'e, muszą one zawierać stage'e używane przez pipeline dyscypliny:</p>
+<table>
+<thead>
+<tr>
+<th>Stage</th>
+<th>Rola w procesie dyscypliny</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>prepare</code></td>
+<td>walidacja deklaracji <code>discipline.yaml</code></td>
+</tr>
+<tr>
+<td><code>validate</code></td>
+<td>joby standardów i pojedyncze pomiary</td>
+</tr>
+<tr>
+<td><code>tests</code></td>
+<td>agregacja wyników i decyzja bramki jakości</td>
+</tr>
+</tbody>
+</table>
+<h2 id="wymagane-pliki-w-repozytorium-aplikacji">Wymagane pliki w repozytorium aplikacji<a class="headerlink" href="#wymagane-pliki-w-repozytorium-aplikacji" title="Permanent link">&para;</a></h2>
+<p>Repozytorium aplikacji musi zawierać:</p>
+<table>
+<thead>
+<tr>
+<th>Plik</th>
+<th>Rola</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>discipline.yaml</code></td>
+<td>deklaracja wersji dyscypliny, atestacji i odstępstw</td>
+</tr>
+</tbody>
+</table>
+<p>Repozytorium aplikacji nie musi trzymać lokalnej kopii skryptów:</p>
+<ul>
+<li><code>bin/verification_process/discipline_validate</code>,</li>
+<li><code>bin/verification_process/discipline_verify</code>.</li>
+</ul>
+<p>Pipeline pobiera je z repozytorium dyscypliny wskazanego w <code>discipline.yaml</code>.</p>
+<p>Minimalna deklaracja:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">eye-of-discipline.rachuna.dev/v1</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Discipline</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="nt">metadata</span><span class="p">:</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-service</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="nt">spec</span><span class="p">:</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">  </span><span class="nt">discipline</span><span class="p">:</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">    </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dev.rachuna/eye-of-discipline</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">    </span><span class="nt">ref</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">main</span>
+</code></pre></div>
+<p><code>spec.discipline.repository</code> mówi, skąd pobrać dyscyplinę. <code>spec.discipline.ref</code> mówi, której wersji albo gałęzi dyscypliny użyć do pomiaru.</p>
+<h2 id="zmienne-pipelineu">Zmienne pipeline'u<a class="headerlink" href="#zmienne-pipelineu" title="Permanent link">&para;</a></h2>
+<p>Centralny pipeline definiuje wartości domyślne:</p>
+<table>
+<thead>
+<tr>
+<th>Zmienna</th>
+<th>Domyślna wartość</th>
+<th>Znaczenie</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>DISCIPLINE_FILE</code></td>
+<td><code>discipline.yaml</code></td>
+<td>plik deklaracji zespołu</td>
+</tr>
+<tr>
+<td><code>CONFORMANCE_FILE</code></td>
+<td><code>conformance.json</code></td>
+<td>artefakt końcowy z wynikiem QA dyscypliny</td>
+</tr>
+<tr>
+<td><code>EYE_DISCIPLINE_REPO</code></td>
+<td><code>dev.rachuna/eye-of-discipline</code></td>
+<td>fallback repozytorium dyscypliny</td>
+</tr>
+<tr>
+<td><code>EYE_DISCIPLINE_REF</code></td>
+<td><code>main</code></td>
+<td>fallback ref procesu</td>
+</tr>
+<tr>
+<td><code>EYE_DISCIPLINE_VALIDATE_SCRIPT_PATH</code></td>
+<td><code>bin/verification_process/discipline_validate</code></td>
+<td>ścieżka walidatora w repozytorium dyscypliny</td>
+</tr>
+<tr>
+<td><code>EYE_DISCIPLINE_VERIFY_SCRIPT_PATH</code></td>
+<td><code>bin/verification_process/discipline_verify</code></td>
+<td>ścieżka agregatora w repozytorium dyscypliny</td>
+</tr>
+</tbody>
+</table>
+<p>W praktyce najważniejsze wartości powinny pochodzić z <code>discipline.yaml</code>, bo to deklaracja aplikacji określa wersję dyscypliny. Zmienne <code>EYE_DISCIPLINE_*</code> są fallbackiem technicznym.</p>
+<h2 id="struktura-procesu">Struktura procesu<a class="headerlink" href="#struktura-procesu" title="Permanent link">&para;</a></h2>
+<p>Centralny pipeline składa się z czterech części:</p>
+<table>
+<thead>
+<tr>
+<th>Element</th>
+<th>Job / plik</th>
+<th>Odpowiedzialność</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>lista jobów standardów</td>
+<td><code>ci/gitlab/verification-process/cheks_jobs.yml</code></td>
+<td>dołącza joby standardów opublikowane przez dyscyplinę</td>
+</tr>
+<tr>
+<td>template standardu</td>
+<td><code>.dyscypline</code></td>
+<td>pobiera dyscyplinę, obsługuje odstępstwa i zapisuje <code>results/{STD_ID}.json</code></td>
+</tr>
+<tr>
+<td>walidacja deklaracji</td>
+<td><code>👁️ Eye discipline:Validate discipline declaration</code></td>
+<td>sprawdza kontrakt <code>discipline.yaml</code></td>
+</tr>
+<tr>
+<td>agregacja wyników</td>
+<td><code>🪬 Eye discipline:Verify discipline standards</code></td>
+<td>buduje <code>conformance.json</code> i zwraca kod bramki jakości</td>
+</tr>
+</tbody>
+</table>
+<p>Pipeline zaczyna się od include jobów standardów:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nt">include</span><span class="p">:</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span><span class="nt">local</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ci/gitlab/verification-process/cheks_jobs.yml</span>
+</code></pre></div>
+<p>W wersji eksportowanej przez centralny include jest to część repozytorium dyscypliny. Aplikacja podłącza tylko główny plik <code>ci/gitlab/verification-process/.gitlab-ci.yml</code>.</p>
+<h2 id="przykadowy-pipeline">Przykładowy pipeline<a class="headerlink" href="#przykadowy-pipeline" title="Permanent link">&para;</a></h2>
+<p><img alt="pipeline" src="../../../../docs/verification_process/gitlab/pipeline.png" /></p>
+<h2 id="walidacja-deklaracji">Walidacja deklaracji<a class="headerlink" href="#walidacja-deklaracji" title="Permanent link">&para;</a></h2>
+<p>Job:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>👁️ Eye discipline:Validate discipline declaration
+</code></pre></div>
+<p>działa w stage'u <code>prepare</code>. Pobiera walidator z repozytorium dyscypliny:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="nv">encoded_project</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">DISCIPLINE_REPOSITORY</span><span class="p">//</span><span class="se">\/</span><span class="p">/%2F</span><span class="si">}</span><span class="s2">&quot;</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="nv">encoded_path</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">EYE_DISCIPLINE_VALIDATE_SCRIPT_PATH</span><span class="p">//</span><span class="se">\/</span><span class="p">/%2F</span><span class="si">}</span><span class="s2">&quot;</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="nv">validate_url</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">CI_API_V4_URL</span><span class="si">}</span><span class="s2">/projects/</span><span class="si">${</span><span class="nv">encoded_project</span><span class="si">}</span><span class="s2">/repository/files/</span><span class="si">${</span><span class="nv">encoded_path</span><span class="si">}</span><span class="s2">/raw?ref=</span><span class="si">${</span><span class="nv">DISCIPLINE_REF</span><span class="si">}</span><span class="s2">&quot;</span>
+</code></pre></div>
+<p>Następnie uruchamia:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>./.discipline_validate<span class="w"> </span>--file<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$DISCIPLINE_FILE</span><span class="s2">&quot;</span>
+</code></pre></div>
+<p>Walidator sprawdza kontrakt deklaracji:</p>
+<ul>
+<li>obecność pliku,</li>
+<li><code>apiVersion</code>,</li>
+<li><code>kind</code>,</li>
+<li><code>metadata.name</code>,</li>
+<li><code>spec.discipline.repository</code>,</li>
+<li><code>spec.discipline.ref</code>,</li>
+<li>strukturę atestacji,</li>
+<li>strukturę odstępstw.</li>
+</ul>
+<p>Błąd walidacji oznacza błąd deklaracji, a nie niezgodność ze standardem.</p>
+<h2 id="joby-standardow">Joby standardów<a class="headerlink" href="#joby-standardow" title="Permanent link">&para;</a></h2>
+<p>Każdy standard ma własny job. Definicje jobów są generowane w procesie wytwórczym dyscypliny i publikowane w:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>ci/gitlab/verification-process/cheks_jobs.yml
+</code></pre></div>
+<p>Obowiązuje zasada:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>jeden standard = jeden job = jeden raport results/{STD_ID}.json
+</code></pre></div>
+<p>Job standardu rozszerza <code>.dyscypline</code>, ustawia <code>STD_ID</code>, uruchamia właściwy <code>bin/checks</code> i zapisuje raport:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="p">{</span><span class="nt">&quot;key&quot;</span><span class="p">:</span><span class="s2">&quot;STD-REPO-001&quot;</span><span class="p">,</span><span class="nt">&quot;status&quot;</span><span class="p">:</span><span class="s2">&quot;pass&quot;</span><span class="p">}</span>
+</code></pre></div>
+<p>Jeżeli dla standardu istnieje aktywne odstępstwo, raport ma status <code>waived</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="p">{</span><span class="nt">&quot;key&quot;</span><span class="p">:</span><span class="s2">&quot;STD-REPO-002&quot;</span><span class="p">,</span><span class="nt">&quot;status&quot;</span><span class="p">:</span><span class="s2">&quot;waived&quot;</span><span class="p">,</span><span class="nt">&quot;exception&quot;</span><span class="p">:{</span><span class="nt">&quot;check&quot;</span><span class="p">:</span><span class="s2">&quot;STD-REPO-002&quot;</span><span class="p">,</span><span class="nt">&quot;reason&quot;</span><span class="p">:</span><span class="s2">&quot;repozytorium jest w trakcie migracji&quot;</span><span class="p">,</span><span class="nt">&quot;owner&quot;</span><span class="p">:</span><span class="s2">&quot;platform-team&quot;</span><span class="p">,</span><span class="nt">&quot;expires&quot;</span><span class="p">:</span><span class="s2">&quot;2026-09-30&quot;</span><span class="p">}}</span>
+</code></pre></div>
+<p>Pełny kontrakt joba, template'u <code>.dyscypline</code>, zmiennych i raportu standardu opisuje dokument <a href="../standard_check_job.html">Definicja joba weryfikującego</a>.</p>
+<h2 id="template-dyscypline">Template <code>.dyscypline</code><a class="headerlink" href="#template-dyscypline" title="Permanent link">&para;</a></h2>
+<p>Template <code>.dyscypline</code> jest wspólną bazą dla jobów standardów. Odpowiada za:</p>
+<ul>
+<li>logowanie do GitLab przez <code>glab</code>,</li>
+<li>pobranie repozytorium dyscypliny wskazanego w <code>discipline.yaml</code>,</li>
+<li>skopiowanie narzędzi <code>bin/</code> z pobranej wersji dyscypliny,</li>
+<li>sprawdzenie, czy dla <code>STD_ID</code> istnieje aktywne odstępstwo,</li>
+<li>zapis raportu <code>results/{STD_ID}.json</code>,</li>
+<li>wystawienie artefaktu <code>results/</code>,</li>
+<li>wypisanie linku do dokumentacji standardu.</li>
+</ul>
+<p>Aktywne odstępstwo kończy job kodem <code>101</code>. Template dopuszcza:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="nt">allow_failure</span><span class="p">:</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="w">  </span><span class="nt">exit_codes</span><span class="p">:</span>
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">101</span>
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">120</span>
+</code></pre></div>
+<p>Kod <code>101</code> oznacza aktywne odstępstwo. Kod <code>120</code> oznacza brak albo niezaimplementowany check. Oba przypadki są raportowane, ale nie są interpretowane jako zwykły sukces checka.</p>
+<p>Jeżeli <code>expires</code> w odstępstwie jest wcześniejsze niż bieżąca data UTC, odstępstwo jest ignorowane i check uruchamia się normalnie.</p>
+<h2 id="agregacja-wynikow">Agregacja wyników<a class="headerlink" href="#agregacja-wynikow" title="Permanent link">&para;</a></h2>
+<p>Job:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>🪬 Eye discipline:Verify discipline standards
+</code></pre></div>
+<p>działa w stage'u <code>tests</code>. Pobiera agregator z repozytorium dyscypliny:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="nv">encoded_project</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">DISCIPLINE_REPOSITORY</span><span class="p">//</span><span class="se">\/</span><span class="p">/%2F</span><span class="si">}</span><span class="s2">&quot;</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="nv">encoded_path</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">EYE_DISCIPLINE_VERIFY_SCRIPT_PATH</span><span class="p">//</span><span class="se">\/</span><span class="p">/%2F</span><span class="si">}</span><span class="s2">&quot;</span>
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="nv">verify_url</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">CI_API_V4_URL</span><span class="si">}</span><span class="s2">/projects/</span><span class="si">${</span><span class="nv">encoded_project</span><span class="si">}</span><span class="s2">/repository/files/</span><span class="si">${</span><span class="nv">encoded_path</span><span class="si">}</span><span class="s2">/raw?ref=</span><span class="si">${</span><span class="nv">DISCIPLINE_REF</span><span class="si">}</span><span class="s2">&quot;</span>
+</code></pre></div>
+<p>Następnie uruchamia:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>./.discipline_verify<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="w">  </span>--results-dir<span class="w"> </span>results<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="w">  </span>--discipline-file<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$DISCIPLINE_FILE</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="w">  </span>--output<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$CONFORMANCE_FILE</span><span class="s2">&quot;</span>
+</code></pre></div>
+<p>Skrypt czyta <code>results/*.json</code>, buduje <code>conformance.json</code> i wypisuje komunikat przeznaczony dla odbiorcy pipeline'u.</p>
+<p>Możliwe statusy końcowe:</p>
+<table>
+<thead>
+<tr>
+<th>Status</th>
+<th>Znaczenie</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>pass</code></td>
+<td>wszystkie standardy przeszły</td>
+</tr>
+<tr>
+<td><code>pass_with_waivers</code></td>
+<td>są niezgodności, ale wszystkie są objęte aktywnym odstępstwem</td>
+</tr>
+<tr>
+<td><code>fail</code></td>
+<td>istnieje niezgodność bez aktywnego odstępstwa</td>
+</tr>
+<tr>
+<td><code>error</code></td>
+<td>nie udało się odczytać części raportów</td>
+</tr>
+<tr>
+<td><code>no_checks</code></td>
+<td>nie znaleziono <code>results/*.json</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="bramka-jakosci">Bramka jakości<a class="headerlink" href="#bramka-jakosci" title="Permanent link">&para;</a></h2>
+<p>Job agregacji jest bramką jakości dla głównego pipeline'u CI.</p>
+<p>Kody wyjścia mają następujące znaczenie:</p>
+<table>
+<thead>
+<tr>
+<th>Kod</th>
+<th>Znaczenie</th>
+<th>Skutek</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>0</code></td>
+<td>wszystko ok</td>
+<td>pipeline przechodzi</td>
+</tr>
+<tr>
+<td><code>101</code></td>
+<td>nie ok, ale wszystkie niezgodności mają aktywne odstępstwo</td>
+<td>job jest <code>allow_failure</code>, pipeline może przejść</td>
+</tr>
+<tr>
+<td><code>1</code></td>
+<td>nie ok i brak odstępstwa albo błąd agregacji</td>
+<td>pipeline jest zablokowany</td>
+</tr>
+</tbody>
+</table>
+<p>Pipeline ma:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="nt">allow_failure</span><span class="p">:</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="w">  </span><span class="nt">exit_codes</span><span class="p">:</span>
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">101</span>
+</code></pre></div>
+<p>Dzięki temu aktywne odstępstwo jest widoczne w logu i w <code>conformance.json</code>, ale nie blokuje głównego pipeline'u. Brak odstępstwa dla realnej niezgodności kończy się kodem <code>1</code> i blokuje pipeline.</p>
+<p>Przykładowe komunikaty:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>✅ Bramka jakości dyscypliny: OK. Wszystkie wymagane standardy przeszły.
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>⚠️ Bramka jakości dyscypliny: OK z odstępstwem. Niezgodności są objęte ważnym odstępstwem.
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a>- STD-REPO-002: odstępstwo do 2026-09-30; właściciel: platform-team; powód: repozytorium jest w trakcie migracji
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>❌ Bramka jakości dyscypliny: BLOKADA. Wykryto niezgodności bez ważnego odstępstwa.
+<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a>- STD-REPO-003: results/STD-REPO-003.json
+</code></pre></div>
+<h2 id="artefakty">Artefakty<a class="headerlink" href="#artefakty" title="Permanent link">&para;</a></h2>
+<p>Joby standardów zapisują:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a>results/
+</code></pre></div>
+<p>Job agregacji zapisuje:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>conformance.json
+</code></pre></div>
+<p><code>conformance.json</code> jest artefaktem CI. Nie powinien być commitowany do repozytorium aplikacji, ponieważ opisuje wynik konkretnego uruchomienia pipeline'u.</p>
+<h2 id="minimalna-integracja">Minimalna integracja<a class="headerlink" href="#minimalna-integracja" title="Permanent link">&para;</a></h2>
+<p>Minimalna integracja w repozytorium aplikacji składa się z dwóch elementów:</p>
+<ol>
+<li>Plik <code>discipline.yaml</code>.</li>
+<li>Include centralnego pipeline'u:</li>
+</ol>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="nt">include</span><span class="p">:</span>
+<a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">project</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dev.rachuna/eye-of-discipline</span>
+<a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a><span class="w">    </span><span class="nt">file</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ci/gitlab/verification-process/.gitlab-ci.yml</span>
+<a id="__codelineno-22-4" name="__codelineno-22-4" href="#__codelineno-22-4"></a><span class="w">    </span><span class="nt">ref</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">main</span>
+</code></pre></div>
+<p>Repozytorium aplikacji nie musi przenosić <code>cheks_jobs.yml</code>, <code>discipline_validate</code> ani <code>discipline_verify</code>. Są one częścią wersjonowanego procesu w repozytorium dyscypliny.</p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
+  Powrót do góry
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../../../..", "features": ["navigation.tabs", "navigation.top", "content.code.copy", "toc.follow"], "search": "../../../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Skopiowano do schowka", "clipboard.copy": "Kopiuj do schowka", "search.result.more.one": "1 wi\u0119cej na tej stronie", "search.result.more.other": "# wi\u0119cej na tej stronie", "search.result.none": "Brak wynik\u00f3w wyszukiwania", "search.result.one": "Wyniki wyszukiwania: 1", "search.result.other": "Wyniki wyszukiwania: #", "search.result.placeholder": "Zacznij pisa\u0107, aby szuka\u0107", "search.result.term.missing": "Brak", "select.version": "Wybierz wersj\u0119"}, "version": {"default": "latest", "provider": "mike"}}</script>
+    
+    
+      <script src="../../../../assets/javascripts/bundle.fe8b6f2b.min.js"></script>
+      
+        <script src="../../../../javascripts/tablesort/5.3.0/dist/tablesort.min.js"></script>
+      
+        <script src="../../../../javascripts/tablesort.js"></script>
+      
+    
+  </body>
+</html>

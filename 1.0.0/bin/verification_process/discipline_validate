@@ -1,0 +1,194 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+readonly EXPECTED_API_VERSION="eye-of-discipline.rachuna.dev/v1"
+readonly EXPECTED_KIND="Discipline"
+
+DISCIPLINE_FILE="discipline.yaml"
+QUIET=0
+
+usage() {
+    cat <<'EOF'
+Usage:
+  bin/verification_process/discipline_validate [--file discipline.yaml] [--quiet]
+
+Validates the discipline declaration committed by an application team.
+
+Options:
+  -f, --file PATH   Path to discipline.yaml. Default: discipline.yaml
+  -q, --quiet       Print only validation errors
+  -h, --help        Show this help
+EOF
+}
+
+log() {
+    if [[ "$QUIET" -eq 0 ]]; then
+        printf '%s\n' "$*"
+    fi
+}
+
+fail() {
+    printf 'ERROR: %s\n' "$*" >&2
+    exit 1
+}
+
+read_yaml() {
+    local path="$1"
+    yq -r ".$path // empty" "$DISCIPLINE_FILE" 2>/dev/null || true
+}
+
+require_command() {
+    local command_name="$1"
+    command -v "$command_name" >/dev/null 2>&1 || fail "required command not found: $command_name"
+}
+
+require_file() {
+    [[ -f "$DISCIPLINE_FILE" ]] || fail "discipline declaration not found: $DISCIPLINE_FILE"
+}
+
+require_value() {
+    local path="$1"
+    local value
+
+    value="$(read_yaml "$path")"
+    [[ -n "$value" ]] || fail "missing required field: $path"
+    [[ "$value" != "null" ]] || fail "missing required field: $path"
+
+    printf '%s' "$value"
+}
+
+require_equals() {
+    local path="$1"
+    local expected="$2"
+    local value
+
+    value="$(require_value "$path")"
+    [[ "$value" == "$expected" ]] || fail "invalid $path: expected '$expected', got '$value'"
+}
+
+require_object_if_present() {
+    local path="$1"
+    local value_type
+
+    value_type="$(yaml_type "$path")"
+    [[ -z "$value_type" ]] && return 0
+
+    [[ "$value_type" == "object" ]] || fail "invalid $path: expected object, got $value_type"
+}
+
+require_array_if_present() {
+    local path="$1"
+    local value_type
+
+    value_type="$(yaml_type "$path")"
+    [[ -z "$value_type" ]] && return 0
+
+    [[ "$value_type" == "array" ]] || fail "invalid $path: expected array, got $value_type"
+}
+
+yaml_type() {
+    local path="$1"
+    yq -r ".$path | if . == null then \"\" else type end" "$DISCIPLINE_FILE" 2>/dev/null || true
+}
+
+validate_exceptions() {
+    local length
+    local index
+
+    require_array_if_present "spec.exceptions"
+
+    length="$(yq -r '.spec.exceptions // [] | length' "$DISCIPLINE_FILE")"
+    for ((index = 0; index < length; index++)); do
+        require_exception_field "$index" "check"
+        require_exception_field "$index" "reason"
+        require_exception_field "$index" "owner"
+        require_exception_field "$index" "expires"
+    done
+}
+
+require_exception_field() {
+    local index="$1"
+    local field="$2"
+    local value
+
+    value="$(read_exception_field "$index" "$field")"
+    [[ -n "$value" ]] || fail "missing required field: spec.exceptions[$index].$field"
+    [[ "$value" != "null" ]] || fail "missing required field: spec.exceptions[$index].$field"
+}
+
+read_exception_field() {
+    local index="$1"
+    local field="$2"
+    local value
+
+    yq -r ".spec.exceptions[$index][\"$field\"] // empty" "$DISCIPLINE_FILE" 2>/dev/null || true
+}
+
+validate_repository() {
+    local repository="$1"
+
+    [[ "$repository" =~ ^[A-Za-z0-9._-]+/[A-Za-z0-9._-]+$ ]] \
+        || fail "invalid spec.discipline.repository: expected owner/name, got '$repository'"
+}
+
+validate_ref() {
+    local ref="$1"
+
+    [[ "$ref" =~ ^[0-9]+[.][0-9]+[.][0-9]+([-.+][A-Za-z0-9._-]+)*$ ]] \
+        || fail "invalid spec.discipline.ref: expected semver-like value, got '$ref'"
+}
+
+parse_args() {
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+        -f|--file)
+            [[ $# -ge 2 ]] || fail "$1 requires a value"
+            DISCIPLINE_FILE="$2"
+            shift 2
+            ;;
+        -q|--quiet)
+            QUIET=1
+            shift
+            ;;
+        -h|--help)
+            usage
+            exit 0
+            ;;
+        *)
+            fail "unknown argument: $1"
+            ;;
+        esac
+    done
+}
+
+main() {
+    local repository
+    local ref
+
+    parse_args "$@"
+
+    require_command yq
+    require_file
+
+    yq -e '.' "$DISCIPLINE_FILE" >/dev/null 2>&1 || fail "invalid YAML: $DISCIPLINE_FILE"
+
+    require_equals "apiVersion" "$EXPECTED_API_VERSION"
+    require_equals "kind" "$EXPECTED_KIND"
+    require_value "metadata.name" >/dev/null
+
+    repository="$(require_value "spec.discipline.repository")"
+    ref="$(require_value "spec.discipline.ref")"
+
+    validate_repository "$repository"
+    validate_ref "$ref"
+
+    require_object_if_present "spec.attest"
+    validate_exceptions
+
+    log "discipline declaration is valid"
+    log "  file: $DISCIPLINE_FILE"
+    log "  repository: $repository"
+    log "  ref: $ref"
+}
+
+main "$@"
