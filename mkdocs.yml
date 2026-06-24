@@ -108,6 +108,8 @@ nav:
     - Standards development process:
       - bin/tools/discipline_create_domain.md
       - bin/tools/discipline_create_standard.md
+      - bin/creative_process/generate_checks_jobs.md
+      - bin/creative_process/stamp_standard_metadata.md
     - Changelog: CHANGELOG.md
   - Discipline Rules:
       - Repository:
