@@ -52,7 +52,7 @@ set-version
 Container image:
 
 ```text
-ghcr.io/eye-of-discipline/image-semantic-release:1.0.0
+ghcr.io/eye-of-discipline/image-semantic-release:1.1.0
 ```
 
 The job runs only for branch pushes:
@@ -176,7 +176,7 @@ publish-version
 Container image:
 
 ```text
-ghcr.io/eye-of-discipline/image-semantic-release:1.0.0
+ghcr.io/eye-of-discipline/image-semantic-release:1.1.0
 ```
 
 The job depends on:

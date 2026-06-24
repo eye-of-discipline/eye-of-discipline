@@ -1,0 +1,135 @@
+---
+include:
+  local: ci/gitlab/verification-process/cheks_jobs.yml
+
+variables:
+  DISCIPLINE_FILE: discipline.yaml
+  CONFORMANCE_FILE: conformance.json
+  EYE_DISCIPLINE_REPO: dev.rachuna/eye-of-discipline
+  EYE_DISCIPLINE_REF: main
+  EYE_DISCIPLINE_VALIDATE_SCRIPT_PATH: bin/verification_process/discipline_validate
+  EYE_DISCIPLINE_VERIFY_SCRIPT_PATH: bin/verification_process/discipline_verify
+
+.dyscypline:
+  stage: validate
+  allow_failure:
+    exit_codes:
+      - 101
+      - 120
+  artifacts:
+    paths:
+      - results/
+    when: always
+    expire_in: 1 day
+  before_script:
+    - |
+      glab auth login --hostname gitlab.com --token "${GITLAB_TOKEN}" --git-protocol https
+    - |
+      DISCIPLINE_REPOSITORY=$(yq '.spec.discipline.repository' discipline.yaml | tr -d '"')
+      DISCIPLINE_REF=$(yq '.spec.discipline.ref' discipline.yaml | tr -d '"')
+
+      echo "DISCIPLINE_REPOSITORY: $DISCIPLINE_REPOSITORY"
+      echo "DISCIPLINE_REF: $DISCIPLINE_REF"
+
+      glab repo clone "${DISCIPLINE_REPOSITORY}" /tmp/discipline -- --branch "${DISCIPLINE_REF}" --depth 1
+      mkdir -p bin
+      cp -fr /tmp/discipline/bin/* bin
+    - |
+      exception_json=$(STD_ID="$STD_ID" yq -r '.spec.exceptions[]? | select(.check == env.STD_ID) | @json' "$DISCIPLINE_FILE" | head -n 1)
+      if [ -n "$exception_json" ]; then
+        expires=$(printf '%s' "$exception_json" | python3 -c 'import json,sys; print(json.load(sys.stdin).get("expires", ""))')
+        today=$(date -u +%F)
+
+        if [ -n "$expires" ] && [ "$expires" \< "$today" ]; then
+          echo "Odstępstwo dla standardu ${STD_ID} wygasło ${expires}; standard zostanie zweryfikowany normalnie."
+        else
+          mkdir -p .discipline
+          printf '%s\n' "$exception_json" > .discipline/exception.json
+          echo "Standard ${STD_ID} uzyskał odstępstwo ważne do ${expires:-bez terminu}."
+          exit 101
+        fi
+      fi
+  after_script:
+    - |
+      DISCIPLINE_REPOSITORY=$(yq '.spec.discipline.repository' discipline.yaml | tr -d '"')
+      DISCIPLINE_REF=$(yq '.spec.discipline.ref' discipline.yaml | tr -d '"')
+
+      [[ ! -v DOCS_MD_FILE_PATH ]] && critical "🫵 Komunikat dla DevOps! Nie ustawiono wartości dla zmiennej 'DOCS_MD_FILE_PATH'"
+
+      echo "Standard: $CI_SERVER_URL/${DISCIPLINE_REPOSITORY}/-/blob/${DISCIPLINE_REF}/$DOCS_MD_FILE_PATH"
+    - |
+      mkdir -p results
+      if [ -f .discipline/exception.json ]; then
+        exception_json=$(tr -d '\n' < .discipline/exception.json)
+        printf '{"key":"%s","status":"waived","exception":%s}\n' "$STD_ID" "$exception_json" > "results/${STD_ID}.json"
+      else
+        STATUS=$([[ "$CI_JOB_STATUS" == "success" ]] && echo "pass" || echo "fail")
+        echo "{\"key\":\"${STD_ID}\",\"status\":\"${STATUS}\"}" > "results/${STD_ID}.json"
+      fi
+      cat results/${STD_ID}.json | jq -r '.'
+
+👁️ Eye discipline:Validate discipline declaration:
+  image: registry.gitlab.com/dev.rachuna/artifacts/containers/python:1.2.0
+  stage: prepare
+  script:
+    - |
+      DISCIPLINE_REPOSITORY=$(yq '.spec.discipline.repository' discipline.yaml | tr -d '"') || DISCIPLINE_REPOSITORY=$EYE_DISCIPLINE_REPO
+      DISCIPLINE_REF=$(yq '.spec.discipline.ref' discipline.yaml | tr -d '"') || DISCIPLINE_REF=$EYE_DISCIPLINE_REF
+
+      echo "DISCIPLINE_REPOSITORY: $DISCIPLINE_REPOSITORY"
+      echo "DISCIPLINE_REF: $DISCIPLINE_REF"
+    - |
+      encoded_project="${DISCIPLINE_REPOSITORY//\//%2F}"
+      encoded_path="${EYE_DISCIPLINE_VALIDATE_SCRIPT_PATH//\//%2F}"
+      validate_url="${CI_API_V4_URL}/projects/${encoded_project}/repository/files/${encoded_path}/raw?ref=${DISCIPLINE_REF}"
+
+      if [ -n "${CI_JOB_TOKEN:-}" ]; then
+        curl -fsSL --header "JOB-TOKEN: ${CI_JOB_TOKEN}" "$validate_url" -o .discipline_validate
+      else
+        curl -fsSL "$validate_url" -o .discipline_validate
+      fi
+
+      chmod +x .discipline_validate
+      ./.discipline_validate --file "$DISCIPLINE_FILE"
+
+🪬 Eye discipline:Verify discipline standards:
+  image: registry.gitlab.com/dev.rachuna/artifacts/containers/python:1.2.0
+  stage: tests
+  when: always
+  allow_failure:
+    exit_codes:
+      - 101
+  script:
+    - |
+      DISCIPLINE_REPOSITORY=$(yq '.spec.discipline.repository' discipline.yaml | tr -d '"') || DISCIPLINE_REPOSITORY=$EYE_DISCIPLINE_REPO
+      DISCIPLINE_REF=$(yq '.spec.discipline.ref' discipline.yaml | tr -d '"') || DISCIPLINE_REF=$EYE_DISCIPLINE_REF
+
+      echo "DISCIPLINE_REPOSITORY: $DISCIPLINE_REPOSITORY"
+      echo "DISCIPLINE_REF: $DISCIPLINE_REF"
+    - |
+      encoded_project="${DISCIPLINE_REPOSITORY//\//%2F}"
+      encoded_path="${EYE_DISCIPLINE_VERIFY_SCRIPT_PATH//\//%2F}"
+      verify_url="${CI_API_V4_URL}/projects/${encoded_project}/repository/files/${encoded_path}/raw?ref=${DISCIPLINE_REF}"
+
+      if [ -n "${CI_JOB_TOKEN:-}" ]; then
+        curl -fsSL --header "JOB-TOKEN: ${CI_JOB_TOKEN}" "$verify_url" -o .discipline_verify
+      else
+        curl -fsSL "$verify_url" -o .discipline_verify
+      fi
+
+      chmod +x .discipline_verify
+      set +e
+      ./.discipline_verify \
+        --results-dir results \
+        --discipline-file "$DISCIPLINE_FILE" \
+        --output "$CONFORMANCE_FILE"
+      verify_rc=$?
+      set -e
+
+      echo "discipline_verify exit code: ${verify_rc}"
+      exit "$verify_rc"
+  artifacts:
+    when: always
+    paths:
+      - $CONFORMANCE_FILE
+    expire_in: never

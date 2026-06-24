@@ -52,7 +52,7 @@ set-version
 Obraz kontenera:
 
 ```text
-ghcr.io/eye-of-discipline/image-semantic-release:1.0.0
+ghcr.io/eye-of-discipline/image-semantic-release:1.1.0
 ```
 
 Job uruchamia się tylko dla pushy do gałęzi:
@@ -176,7 +176,7 @@ publish-version
 Obraz kontenera:
 
 ```text
-ghcr.io/eye-of-discipline/image-semantic-release:1.0.0
+ghcr.io/eye-of-discipline/image-semantic-release:1.1.0
 ```
 
 Job zależy od:

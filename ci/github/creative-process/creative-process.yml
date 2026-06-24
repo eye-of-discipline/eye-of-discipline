@@ -23,7 +23,7 @@ concurrency:
 jobs:
   discipline-verification:
     name: Eye discipline quality gate
-    uses: eye-of-discipline/eye-of-discipline/.github/workflows/verification-process.yml@feat/create-mkdocs-pages
+    uses: eye-of-discipline/eye-of-discipline/.github/workflows/verification-process.yml@main
     secrets: inherit
 
   set-version:

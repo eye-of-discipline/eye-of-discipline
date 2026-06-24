@@ -68,14 +68,14 @@ markdown_extensions:
       permalink: true
 
 extra_javascript:
-  - https://unpkg.com/tablesort@5.3.0/dist/tablesort.min.js
+  - javascripts/tablesort/5.3.0/dist/tablesort.min.js
   - javascripts/tablesort.js
 
 plugins:
   - material/offline
   - same-dir
   - search
-  - material/tags
+  - tags
   - i18n:
       docs_structure: suffix
       languages:
@@ -94,6 +94,7 @@ plugins:
             Discipline Rules: Zasady Dyscypliny
             Standards development process: Proces wytwórczy standardów
             Sample pipeline: Przykładowy pipeline
+            The process of verifying the application of standards: Proces weryfikujący stosowanie standardów
 
 nav:
   - Home:
@@ -116,6 +117,14 @@ nav:
         - docs/creative_process/pipeline.md
         - docs/creative_process/github/creative-process.md
         - docs/creative_process/gitlab/creative-process.md
+    - The process of verifying the repository of standards:
+      - docs/verification_process/verification_process.md
+      - bin/verification_process/discipline_validate.md
+      - docs/verification_process/standard_check_job.md
+      - bin/verification_process/discipline_verify.md
+      - Sample pipeline:
+        - docs/verification_process/github/verification_process.md
+        - docs/verification_process/gitlab/verification_process.md
     - Changelog: CHANGELOG.md
   - Discipline Rules:
       - Repository:

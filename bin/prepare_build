@@ -25,4 +25,4 @@ fi
 #         --templates-dir "$DASHBOARD_TEMPLATES_DIR"
 bin/creative_process/stamp_standard_metadata --version "$VERSION"
 bin/creative_process/generate_checks_jobs
-# bin/commit_build_changes
+bin/commit_build_changes

@@ -1,0 +1,203 @@
+---
+# yamllint disable rule:truthy rule:line-length
+name: Verification process
+
+on:
+  workflow_call:
+    inputs:
+      discipline-file:
+        description: Path to the discipline declaration in the calling repository.
+        required: false
+        type: string
+        default: discipline.yaml
+      conformance-file:
+        description: Path of the generated conformance report.
+        required: false
+        type: string
+        default: conformance.json
+      discipline-repository:
+        description: Fallback discipline repository used when discipline.yaml does not define one.
+        required: false
+        type: string
+        default: eye-of-discipline/eye-of-discipline
+      discipline-ref:
+        description: Fallback discipline ref used when discipline.yaml does not define one.
+        required: false
+        type: string
+        default: main
+    secrets:
+      GH_TOKEN:
+        description: Optional token used to checkout private discipline repositories.
+        required: false
+
+permissions:
+  contents: read
+
+env:
+  DISCIPLINE_FILE: ${{ inputs.discipline-file }}
+  CONFORMANCE_FILE: ${{ inputs.conformance-file }}
+  EYE_DISCIPLINE_REPO: ${{ inputs.discipline-repository }}
+  EYE_DISCIPLINE_REF: ${{ inputs.discipline-ref }}
+
+jobs:
+  validate-discipline:
+    name: 👁️ Eye discipline:Validate discipline declaration
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/eye-of-discipline/image-python:1.0.0
+    outputs:
+      discipline-repository: ${{ steps.discipline.outputs.repository }}
+      discipline-ref: ${{ steps.discipline.outputs.ref }}
+      process-repository: ${{ steps.discipline.outputs.process-repository }}
+      process-ref: ${{ steps.discipline.outputs.process-ref }}
+    steps:
+      - name: Checkout application repository
+        uses: actions/checkout@v5
+
+      - name: Read discipline coordinates
+        id: discipline
+        env:
+          WORKFLOW_REF: ${{ github.workflow_ref }}
+        run: |
+          DISCIPLINE_REPOSITORY="$(yq -r '.spec.discipline.repository // ""' "$DISCIPLINE_FILE")"
+          DISCIPLINE_REF="$(yq -r '.spec.discipline.ref // ""' "$DISCIPLINE_FILE")"
+          PROCESS_REPOSITORY="${WORKFLOW_REF%%/.github/workflows/*}"
+          PROCESS_REF="${WORKFLOW_REF##*@}"
+
+          DISCIPLINE_REPOSITORY="${DISCIPLINE_REPOSITORY:-$EYE_DISCIPLINE_REPO}"
+          DISCIPLINE_REF="${DISCIPLINE_REF:-$EYE_DISCIPLINE_REF}"
+          PROCESS_REPOSITORY="${PROCESS_REPOSITORY:-$EYE_DISCIPLINE_REPO}"
+          PROCESS_REF="${PROCESS_REF:-$EYE_DISCIPLINE_REF}"
+
+          case "$DISCIPLINE_REPOSITORY" in
+            dev.rachuna/eye-of-discipline)
+              DISCIPLINE_REPOSITORY="eye-of-discipline/eye-of-discipline"
+              ;;
+          esac
+
+          echo "repository=${DISCIPLINE_REPOSITORY}" >> "$GITHUB_OUTPUT"
+          echo "ref=${DISCIPLINE_REF}" >> "$GITHUB_OUTPUT"
+          echo "process-repository=${PROCESS_REPOSITORY}" >> "$GITHUB_OUTPUT"
+          echo "process-ref=${PROCESS_REF}" >> "$GITHUB_OUTPUT"
+
+          echo "DISCIPLINE_REPOSITORY: ${DISCIPLINE_REPOSITORY}"
+          echo "DISCIPLINE_REF: ${DISCIPLINE_REF}"
+          echo "PROCESS_REPOSITORY: ${PROCESS_REPOSITORY}"
+          echo "PROCESS_REF: ${PROCESS_REF}"
+
+      - name: Checkout discipline repository
+        uses: actions/checkout@v5
+        with:
+          repository: ${{ steps.discipline.outputs.repository }}
+          ref: ${{ steps.discipline.outputs.ref }}
+          path: .discipline-source
+          token: ${{ secrets.GH_TOKEN || github.token }}
+
+      - name: Checkout process repository
+        uses: actions/checkout@v5
+        with:
+          repository: ${{ steps.discipline.outputs.process-repository }}
+          ref: ${{ steps.discipline.outputs.process-ref }}
+          path: .discipline-process-source
+          token: ${{ secrets.GH_TOKEN || github.token }}
+
+      - name: Validate discipline declaration
+        run: |
+          validate_script=".discipline-source/bin/verification_process/discipline_validate"
+
+          if [ ! -f "$validate_script" ]; then
+            validate_script=".discipline-process-source/bin/verification_process/discipline_validate"
+          fi
+
+          chmod +x "$validate_script"
+          "$validate_script" --file "$DISCIPLINE_FILE"
+
+  verify-standards:
+    name: 👁️ Eye discipline:Verify standard jobs
+    needs:
+      - validate-discipline
+    uses: ./.github/workflows/checks-jobs.yml
+    with:
+      discipline-file: ${{ inputs.discipline-file }}
+      discipline-repository: ${{ needs.validate-discipline.outputs.discipline-repository }}
+      discipline-ref: ${{ needs.validate-discipline.outputs.discipline-ref }}
+      process-repository: ${{ needs.validate-discipline.outputs.process-repository }}
+      process-ref: ${{ needs.validate-discipline.outputs.process-ref }}
+    secrets: inherit
+
+  verify-discipline:
+    name: 🪬 Eye discipline:Verify discipline standards
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/eye-of-discipline/image-python:1.0.0
+    needs:
+      - validate-discipline
+      - verify-standards
+    if: always() && needs.validate-discipline.result == 'success'
+    env:
+      CI_PIPELINE_ID: ${{ github.run_id }}
+      CI_PIPELINE_SOURCE: ${{ github.event_name }}
+      CI_COMMIT_REF_NAME: ${{ github.ref_name }}
+      CI_COMMIT_SHA: ${{ github.sha }}
+      CI_PIPELINE_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+    steps:
+      - name: Checkout application repository
+        uses: actions/checkout@v5
+
+      - name: Checkout discipline repository
+        uses: actions/checkout@v5
+        with:
+          repository: ${{ needs.validate-discipline.outputs.discipline-repository }}
+          ref: ${{ needs.validate-discipline.outputs.discipline-ref }}
+          path: .discipline-source
+          token: ${{ secrets.GH_TOKEN || github.token }}
+
+      - name: Checkout process repository
+        uses: actions/checkout@v5
+        with:
+          repository: ${{ needs.validate-discipline.outputs.process-repository }}
+          ref: ${{ needs.validate-discipline.outputs.process-ref }}
+          path: .discipline-process-source
+          token: ${{ secrets.GH_TOKEN || github.token }}
+
+      - name: Download standard reports
+        continue-on-error: true
+        uses: actions/download-artifact@v7
+        with:
+          pattern: results-*
+          merge-multiple: true
+          path: results
+
+      - name: Aggregate standard results
+        run: |
+          verify_script=".discipline-source/bin/verification_process/discipline_verify"
+
+          if [ ! -f "$verify_script" ]; then
+            verify_script=".discipline-process-source/bin/verification_process/discipline_verify"
+          fi
+
+          chmod +x "$verify_script"
+
+          set +e
+          "$verify_script" \
+            --results-dir results \
+            --discipline-file "$DISCIPLINE_FILE" \
+            --output "$CONFORMANCE_FILE"
+          verify_rc=$?
+          set -e
+
+          echo "discipline_verify exit code: ${verify_rc}"
+
+          if [ "$verify_rc" -eq 101 ]; then
+            exit 0
+          fi
+
+          exit "$verify_rc"
+
+      - name: Upload conformance report
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: conformance
+          path: ${{ inputs.conformance-file }}
+          if-no-files-found: warn

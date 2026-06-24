@@ -1,0 +1,127 @@
+---
+stages:
+  - prepare          # CI | CD
+  - dependency       # CI | CD
+  - validate         # CI | CD
+  - build            # CI |
+  - deployment       #    | CD
+  - tests            # CI | CD
+  - publish          # CI | CD
+
+include:
+  - project: dev.rachuna/eye-of-discipline
+    file: ci/gitlab/verification-process/.gitlab-ci.yml
+    ref: main
+
+## Create version
+🕵 Set Version:
+  image: registry.gitlab.com/dev.rachuna/artifacts/containers/semantic-release:1.2.0
+  stage: prepare
+  rules:
+    - if: '$CI_COMMIT_TAG'
+      when: never
+    - when: on_success
+  artifacts:
+    reports:
+      dotenv: versioning.env
+    expire_in: "1 day"
+    paths:
+      - CHANGELOG.md
+  variables:
+    GIT_DEPTH: "0"
+  script:
+    - |
+      cp ci/gitlab/creative-process/.releaserc.cjs .releaserc.cjs
+    - |
+      echo "🚀 Semantic release"
+      echo "   Using 'semantic-release' from https://github.com/semantic-release"
+
+      semantic-release --dry-run
+
+🏗️ MkDocs build:
+  image: registry.gitlab.com/dev.rachuna/artifacts/containers/mkdocs:1.1.2
+  stage: build
+  rules:
+    - when: on_success
+  needs:
+    - job: 🕵 Set Version
+      artifacts: true
+      optional: true
+  variables:
+    DISABLE_MKDOCS_2_WARNING: "true"
+    PAGES_BRANCH: "gitlab-pages"
+  script:
+    - |
+      git config user.email "ci@gitlab.com"
+      git config user.name "GitLab CI"
+      git fetch origin $PAGES_BRANCH:$PAGES_BRANCH 2>/dev/null || true
+
+    - |
+      if [ -f ./bin/prepare_build ]; then
+        chmod +x ./bin/prepare_build
+        ./bin/prepare_build
+      fi
+      echo "Prepare build is done"
+
+      DOCS_VERSION="${CI_COMMIT_TAG:-${RELEASE_CANDIDATE_VERSION:-}}"
+
+      mike deploy "$DOCS_VERSION" latest \
+        --push \
+        --update-aliases \
+        -b $PAGES_BRANCH \
+        -m "chore: deploy version $DOCS_VERSION" \
+        --ignore-remote-status
+
+      mike set-default --push "$DOCS_VERSION" \
+        -b $PAGES_BRANCH \
+        -m "chore: set default latest version $DOCS_VERSION"
+
+      mkdir -p public
+      git archive $PAGES_BRANCH | tar -xC public/
+  artifacts:
+    paths:
+    - public/
+    expire_in: 1 day
+
+🌐 MkDocs publish:
+  stage: publish
+  rules:
+    - when: on_success
+  needs:
+    - job: 🏗️ MkDocs build
+      artifacts: true
+    - job: 🕵 Set Version
+      artifacts: true
+      optional: true
+  script:
+    - echo "Publishing pages"
+  artifacts:
+    paths:
+    - public
+  pages:
+    publish: public
+
+📍 Publish Version:
+  image: registry.gitlab.com/dev.rachuna/artifacts/containers/semantic-release:1.2.0
+  stage: publish
+  rules:
+    - if: '$CI_COMMIT_TAG'
+      when: never
+    - when: on_success
+  needs:
+    - job: 🕵 Set Version
+      artifacts: true
+      optional: true
+    - job: 🌐 MkDocs publish
+      artifacts: true
+      optional: true
+  variables:
+    GIT_DEPTH: "0"
+  script:
+    - |
+      cp ci/gitlab/creative-process/.releaserc.cjs .releaserc.cjs
+    - |
+      echo "🚀 Semantic release"
+      echo "   Using 'semantic-release' from https://github.com/semantic-release"
+
+      semantic-release

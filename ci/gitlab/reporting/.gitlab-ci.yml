@@ -1,0 +1,32 @@
+---
+stages:
+  - publish
+
+variables:
+  REPORT_GROUP_ID: "132728705"
+  DISCIPLINE_FILE: discipline.yaml
+  CONFORMANCE_FILE: conformance.json
+  DASHBOARD_FILE: docs/dashboard.md
+  DASHBOARD_DETAILS_DIR: docs/dashboard
+  DASHBOARD_TEMPLATES_DIR: bin/reporting_process/templates
+
+📊 Eye discipline:Generate dashboard:
+  image: registry.gitlab.com/dev.rachuna/artifacts/containers/python:1.2.0
+  stage: publish
+  script:
+    - chmod +x bin/reporting_process/discipline_generate_dashboard
+    - |
+      bin/reporting_process/discipline_generate_dashboard \
+        --gitlab-url "$CI_SERVER_URL" \
+        --group-id "$REPORT_GROUP_ID" \
+        --discipline-file "$DISCIPLINE_FILE" \
+        --report-file "$CONFORMANCE_FILE" \
+        --output "$DASHBOARD_FILE" \
+        --details-dir "$DASHBOARD_DETAILS_DIR" \
+        --templates-dir "$DASHBOARD_TEMPLATES_DIR"
+  artifacts:
+    when: always
+    paths:
+      - $DASHBOARD_FILE
+      - $DASHBOARD_DETAILS_DIR/
+    expire_in: 1 day

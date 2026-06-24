@@ -1,0 +1,186 @@
+#!/usr/bin/env python3
+import argparse
+import glob
+import json
+import os
+import sys
+from datetime import datetime, timezone
+
+
+def parse_args():
+    parser = argparse.ArgumentParser(
+        description="Aggregates standard check results into discipline conformance."
+    )
+    parser.add_argument(
+        "--results-dir",
+        default="results",
+        help="Directory with standard check JSON reports. Default: results",
+    )
+    parser.add_argument(
+        "--output",
+        default=os.environ.get("CONFORMANCE_FILE", "conformance.json"),
+        help="Output conformance JSON file. Default: $CONFORMANCE_FILE or conformance.json",
+    )
+    parser.add_argument(
+        "--discipline-file",
+        default=os.environ.get("DISCIPLINE_FILE", "discipline.yaml"),
+        help="Discipline declaration file path. Default: $DISCIPLINE_FILE or discipline.yaml",
+    )
+    return parser.parse_args()
+
+
+def read_results(results_dir):
+    result_files = sorted(glob.glob(os.path.join(results_dir, "*.json")))
+    checks = []
+    errors = []
+
+    for result_file in result_files:
+        try:
+            with open(result_file, encoding="utf-8") as handle:
+                payload = json.load(handle)
+        except Exception as exc:
+            errors.append({
+                "file": result_file,
+                "error": str(exc),
+            })
+            continue
+
+        key = payload.get("key")
+        status = payload.get("status")
+        if not key or not status:
+            errors.append({
+                "file": result_file,
+                "error": "missing required key or status",
+            })
+            continue
+
+        check_result = {
+            "key": key,
+            "status": status,
+            "source": result_file,
+        }
+        if "exception" in payload:
+            check_result["exception"] = payload["exception"]
+
+        checks.append(check_result)
+
+    return checks, errors
+
+
+def resolve_status(checks, errors):
+    failed = [check for check in checks if check["status"] == "fail"]
+    waived = [check for check in checks if check["status"] == "waived"]
+    passed = [check for check in checks if check["status"] == "pass"]
+
+    if errors:
+        status = "error"
+    elif failed:
+        status = "fail"
+    elif waived:
+        status = "pass_with_waivers"
+    elif checks:
+        status = "pass"
+    else:
+        status = "no_checks"
+
+    summary = {
+        "total": len(checks),
+        "passed": len(passed),
+        "waived": len(waived),
+        "failed": len(failed),
+        "errors": len(errors),
+    }
+
+    return status, summary, passed, waived, failed
+
+
+def build_conformance(args, status, summary, checks, waived, errors):
+    return {
+        "apiVersion": "eye-of-discipline.rachuna.dev/v1",
+        "kind": "DisciplineConformance",
+        "status": status,
+        "generatedAt": datetime.now(timezone.utc).isoformat(),
+        "disciplineFile": args.discipline_file,
+        "pipeline": {
+            "id": os.environ.get("CI_PIPELINE_ID", ""),
+            "source": os.environ.get("CI_PIPELINE_SOURCE", ""),
+            "ref": os.environ.get("CI_COMMIT_REF_NAME", ""),
+            "sha": os.environ.get("CI_COMMIT_SHA", ""),
+            "url": os.environ.get("CI_PIPELINE_URL", ""),
+        },
+        "summary": summary,
+        "waivers": [
+            {
+                "key": check["key"],
+                "exception": check.get("exception", {}),
+                "source": check["source"],
+            }
+            for check in waived
+        ],
+        "checks": checks,
+        "errors": errors,
+    }
+
+
+def write_conformance(output_file, conformance):
+    with open(output_file, "w", encoding="utf-8") as handle:
+        json.dump(conformance, handle, ensure_ascii=False, indent=2)
+        handle.write("\n")
+
+    json.dump(conformance, sys.stdout, ensure_ascii=False, indent=2)
+    print()
+    print()
+
+
+def print_status_message(status, waived, failed, errors):
+    if status == "pass":
+        print("✅ Bramka jakości dyscypliny: OK. Wszystkie wymagane standardy przeszły.")
+        return 0
+
+    if status == "pass_with_waivers":
+        print("⚠️ Bramka jakości dyscypliny: OK z odstępstwem. Niezgodności są objęte ważnym odstępstwem.")
+        for check in waived:
+            exception = check.get("exception", {})
+            print(
+                "- {key}: odstępstwo do {expires}; właściciel: {owner}; powód: {reason}".format(
+                    key=check["key"],
+                    expires=exception.get("expires", "brak terminu"),
+                    owner=exception.get("owner", "brak właściciela"),
+                    reason=exception.get("reason", "brak powodu"),
+                )
+            )
+        return 101
+
+    if status == "error":
+        print("❌ Bramka jakości dyscypliny: BŁĄD AGREGACJI. Nie udało się odczytać części raportów.")
+        for error in errors:
+            print("- {file}: {error}".format(
+                file=error.get("file", "unknown"),
+                error=error.get("error", "unknown error"),
+            ))
+        return 1
+
+    if status == "no_checks":
+        print("❌ Bramka jakości dyscypliny: BRAK CHECKÓW. Nie znaleziono raportów results/*.json.")
+        return 1
+
+    print("❌ Bramka jakości dyscypliny: BLOKADA. Wykryto niezgodności bez ważnego odstępstwa.")
+    for check in failed:
+        print("- {key}: {source}".format(
+            key=check["key"],
+            source=check["source"],
+        ))
+    return 1
+
+
+def main():
+    args = parse_args()
+    checks, errors = read_results(args.results_dir)
+    status, summary, _passed, waived, failed = resolve_status(checks, errors)
+    conformance = build_conformance(args, status, summary, checks, waived, errors)
+    write_conformance(args.output, conformance)
+    return print_status_message(status, waived, failed, errors)
+
+
+if __name__ == "__main__":
+    sys.exit(main())

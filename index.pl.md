@@ -1,4 +1,4 @@
-# <img src="/docs/logo.png" alt="logo" style="height:40px;"> Eye of Discipline
+# <img src="../docs/logo.png" alt="logo" style="height:40px;"> Eye of Discipline
 
 ![GitHub Stars](https://img.shields.io/github/stars/eye-of-discipline/eye-of-discipline)
 ![GitLab Forks](https://img.shields.io/github/forks/eye-of-discipline/eye-of-discipline)

@@ -1,0 +1,156 @@
+---
+# yamllint disable rule:truthy rule:line-length
+# Generated from standards/**/.github-actions.yml. Do not edit manually.
+# Each standards/**/.github-actions.yml file should define one standard job.
+name: Verification process checks jobs
+
+on:
+  workflow_call:
+    inputs:
+      discipline-file:
+        description: Path to the discipline declaration in the calling repository.
+        required: true
+        type: string
+      discipline-repository:
+        description: Discipline repository to checkout.
+        required: true
+        type: string
+      discipline-ref:
+        description: Discipline ref to checkout.
+        required: true
+        type: string
+      process-repository:
+        description: Process repository to checkout for verification tools.
+        required: true
+        type: string
+      process-ref:
+        description: Process ref to checkout for verification tools.
+        required: true
+        type: string
+    secrets:
+      GH_TOKEN:
+        description: Optional token used to checkout private discipline repositories.
+        required: false
+
+permissions:
+  contents: read
+
+env:
+  DISCIPLINE_FILE: ${{ inputs.discipline-file }}
+
+jobs:
+  # Source: standards/repository/STD-REPO-001/.github-actions.yml
+  std-repo-001:
+    name: 👁️ Eye discipline:STD-REPO-001
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/eye-of-discipline/image-python:1.0.0
+    env:
+      STD_DOMAIN: repository
+      STD_ID: STD-REPO-001
+      DOCS_MD_FILE_PATH: standards/repository/STD-REPO-001/README.en.md
+      STD_CHECK_SCRIPT: .discipline-source/standards/repository/STD-REPO-001/bin/checks
+    steps:
+      - name: Checkout application repository
+        uses: actions/checkout@v5
+
+      - name: Checkout discipline repository
+        uses: actions/checkout@v5
+        with:
+          repository: ${{ inputs.discipline-repository }}
+          ref: ${{ inputs.discipline-ref }}
+          path: .discipline-source
+          token: ${{ secrets.GH_TOKEN || github.token }}
+
+      - name: Checkout process repository
+        uses: actions/checkout@v5
+        with:
+          repository: ${{ inputs.process-repository }}
+          ref: ${{ inputs.process-ref }}
+          path: .discipline-process-source
+          token: ${{ secrets.GH_TOKEN || github.token }}
+
+      - name: Prepare discipline tools
+        run: |
+          mkdir -p bin
+          if [ -d .discipline-source/bin ]; then
+            cp -fr .discipline-source/bin/* bin
+          fi
+
+          if [ -d .discipline-process-source/bin ]; then
+            cp -fr .discipline-process-source/bin/* bin
+          fi
+
+      - name: Check waiver
+        id: waiver
+        run: |
+          exception_json="$(STD_ID="$STD_ID" yq -r '.spec.exceptions[]? | select(.check == env.STD_ID) | @json' "$DISCIPLINE_FILE" | head -n 1)"
+
+          if [ -z "$exception_json" ]; then
+            echo "status=none" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          expires="$(printf '%s' "$exception_json" | python3 -c 'import json,sys; print(json.load(sys.stdin).get("expires", ""))')"
+          today="$(date -u +%F)"
+
+          if [ -n "$expires" ] && [ "$expires" \< "$today" ]; then
+            echo "Waiver for ${STD_ID} expired on ${expires}; the standard will be verified normally."
+            echo "status=expired" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          mkdir -p .discipline
+          printf '%s\n' "$exception_json" > .discipline/exception.json
+          echo "Standard ${STD_ID} has an active waiver until ${expires:-no expiry date}."
+          echo "status=active" >> "$GITHUB_OUTPUT"
+
+      - name: Run standard check
+        id: check
+        if: steps.waiver.outputs.status != 'active'
+        run: |
+          if [ ! -f "$STD_CHECK_SCRIPT" ]; then
+            echo "Standard check script not found: $STD_CHECK_SCRIPT"
+            echo "status=fail" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          set +e
+          bash "$STD_CHECK_SCRIPT"
+          check_rc=$?
+          set -e
+
+          if [ "$check_rc" -eq 0 ]; then
+            echo "status=pass" >> "$GITHUB_OUTPUT"
+          else
+            echo "status=fail" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Write standard report
+        if: always()
+        run: |
+          mkdir -p results
+
+          if [ -f .discipline/exception.json ]; then
+            exception_json="$(tr -d '\n' < .discipline/exception.json)"
+            printf '{"key":"%s","status":"waived","exception":%s}\n' "$STD_ID" "$exception_json" > "results/${STD_ID}.json"
+          else
+            status="${{ steps.check.outputs.status }}"
+            status="${status:-fail}"
+            printf '{"key":"%s","status":"%s"}\n' "$STD_ID" "$status" > "results/${STD_ID}.json"
+          fi
+
+          cat "results/${STD_ID}.json" | jq -r '.'
+          echo "Standard documentation: https://github.com/${{ inputs.discipline-repository }}/blob/${{ inputs.discipline-ref }}/${DOCS_MD_FILE_PATH}"
+
+      - name: Upload standard report
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: results-STD-REPO-001
+          path: results/*.json
+          retention-days: 90
+
+      - name: Fail standard job
+        if: always() && steps.check.outputs.status == 'fail' && steps.waiver.outputs.status != 'active'
+        run: exit 1

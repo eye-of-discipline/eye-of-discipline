@@ -59,7 +59,7 @@ image-semantic-release
 GitHub Actions uses this image:
 
 ```text
-ghcr.io/eye-of-discipline/image-semantic-release:1.0.0
+ghcr.io/eye-of-discipline/image-semantic-release:1.1.0
 ```
 
 In GitLab CI, the equivalent is the semantic-release image from the GitLab registry.

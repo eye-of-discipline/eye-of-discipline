@@ -1,0 +1,25 @@
+---
+apiVersion: eye-of-discipline.rachuna.dev/v1
+kind: Discipline
+metadata:
+  name: eye-of-discipline
+spec:
+  discipline:
+    repository: dev.rachuna/eye-of-discipline
+    ref: 1.0.0
+
+  # Atestacje manualne — procesy których CI nie może automatycznie zweryfikować
+  attest:
+    STD-REPO-002:
+      r6: true  # R6. Merge Request MUSI być przejrzany przez co najmniej jedną osobę (attestation)
+      r7: true  # R7. Konfiguracja ochrony branchy MUSI być zarządzana przez projekt Opentofu (attestation)
+      r10: true  # R10. Gałęzie robocze MUSZĄ być tworzone zgodnie z konwencją nazewniczą (attestation)
+      r11: true  # R11. Wdrożenia produkcyjne MOGĄ być wykonywane wyłącznie z gałęzi main, release/* lub hotfix/* (attestation)
+
+  # Waivery — jawny dług z właścicielem i terminem
+  exceptions:
+    # - check: STD-REPO-002
+    #   reason: "Gitlab Free nie ma możliwości ustawienia approvals dla Code Review"
+    #   owner: mrachuna
+    #   expires: 2027-09-30
+    #   ticket: ~
