@@ -1,0 +1,73 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+COMMIT_MESSAGE="chore(standards): Nadanie wersji zmienionym standardom lub aktualizacja dashboard"
+
+usage() {
+    cat <<'EOF'
+Usage:
+  bin/commit_build_changes [--message MESSAGE]
+
+Commits and pushes generated repository changes.
+
+Options:
+  -m, --message MESSAGE   Commit message
+  -h, --help              Show this help
+EOF
+}
+
+fail() {
+    printf 'ERROR: %s\n' "$*" >&2
+    exit 1
+}
+
+require_env() {
+    local name="$1"
+    [[ -n "${!name:-}" ]] || fail "required environment variable is empty: $name"
+}
+
+parse_args() {
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+        -m|--message)
+            [[ $# -ge 2 ]] || fail "$1 requires a value"
+            COMMIT_MESSAGE="$2"
+            shift 2
+            ;;
+        -h|--help)
+            usage
+            exit 0
+            ;;
+        *)
+            fail "unknown argument: $1"
+            ;;
+        esac
+    done
+}
+
+main() {
+    parse_args "$@"
+
+    git status
+    git add .
+    git reset -- bin/
+    git reset -- docs/dashboard/
+    git reset -- docs/dashboard.md
+
+    if git diff --cached --quiet; then
+        printf 'No changes to commit.\n'
+        exit 0
+    fi
+
+    require_env GITLAB_USER_EMAIL
+    require_env GITLAB_USER_NAME
+    require_env CI_COMMIT_REF_NAME
+
+    git config user.email "${GITLAB_USER_EMAIL}"
+    git config user.name "${GITLAB_USER_NAME}"
+    git commit -m "$COMMIT_MESSAGE"
+    git push --force-with-lease origin "HEAD:${CI_COMMIT_REF_NAME}"
+    printf 'Changes have been added, continue\n'
+}
+
+main "$@"

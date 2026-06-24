@@ -1,12 +1,12 @@
 ---
 id: STD-REPO-001
 title: Struktura plików w repozytorium
-domain: repozytorium
+domain: repository
 status: active
 conformance: mandatory
 since: 1.0.0
 owner: team-platform
-tags: [repozytorium, 1.0.0]
+tags: [repository, 1.0.0]
 ---
 
 # STD-REPO-001 · Struktura plików w repozytorium

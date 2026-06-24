@@ -93,6 +93,7 @@ plugins:
             Creating Standards: Tworzenie norm
             Discipline Rules: Zasady Dyscypliny
             Standards development process: Proces wytwórczy standardów
+            Sample pipeline: Przykładowy pipeline
 
 nav:
   - Home:
@@ -106,24 +107,18 @@ nav:
       - docs/creating_standards/writing_standard_documentation.md
       - docs/creating_standards/writing_standard_check.md
     - Standards development process:
+      - docs/creative_process/creative_process.md
       - bin/tools/discipline_create_domain.md
       - bin/tools/discipline_create_standard.md
+      - bin/creative_process/generate_checks_jobs.md
+      - bin/creative_process/stamp_standard_metadata.md
+      - Sample pipeline:
+        - docs/creative_process/pipeline.md
+        - docs/creative_process/github/creative-process.md
+        - docs/creative_process/gitlab/creative-process.md
     - Changelog: CHANGELOG.md
   - Discipline Rules:
       - Repository:
           - standards/repository/STD-REPO-001/README.md
-
-  
-  #     - Proces tworzenia standardów:
-  #         - Idea procesu tworzenia: docs/creative_process.md
-  #         - Generator domen dyscypliny: bin/tools/discipline_create_domain.md
-  #     - Proces weryfikacji standardów:
-  #         - Idea procesu weryfikacji: docs/verification_process.md
-  #     - Proces raportowania:
-  #         - Idea procesu raportowania: docs/reporting_process.md
-  #     - Changelog: CHANGELOG.md
-  # - Zasady dyscypliny:
-  #     - Repozytorium:
-  #         - standards/repository/STD-REPO-001/README.md
       - Changelog: CHANGELOG.md
   - Tags: docs/tags.md

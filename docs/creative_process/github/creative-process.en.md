@@ -1,0 +1,267 @@
+# Github Creative Process Pipeline
+
+`.github/workflows/creative-process.yml` implements the release preparation pipeline for the discipline repository.
+
+The pipeline calculates the next release candidate, prepares and publishes versioned MkDocs documentation, and finally runs `semantic-release` to publish the version.
+
+## Triggers
+
+The workflow runs on:
+
+| Event | Behavior |
+| --- | --- |
+| `push` to any branch | runs the creative process jobs |
+| `push` of `v*` tags | starts the workflow, but creative process jobs are skipped |
+| `workflow_dispatch` | manual entry point with a `version` input |
+
+Tag pipelines are intentionally skipped by the creative process jobs because the release is created by `semantic-release`, not by manually pushing release tags.
+
+## Permissions
+
+The workflow uses:
+
+```yaml
+permissions:
+  contents: write
+```
+
+This is required because the pipeline writes to the Pages branch and `semantic-release` may create release commits and tags.
+
+## Jobs
+
+```text
+🕵 Set Version
+      |
+      v
+🏗️ MkDocs build
+      |
+      v
+📍 Publish Version
+```
+
+GitHub Actions does not have GitLab-style `stages`. Job order is modeled with `needs`.
+
+## 🕵 Set Version
+
+Technical job ID:
+
+```yaml
+set-version
+```
+
+Container image:
+
+```text
+ghcr.io/eye-of-discipline/image-semantic-release:1.0.0
+```
+
+The job runs only for branch pushes:
+
+```yaml
+if: github.event_name == 'push' && !startsWith(github.ref, 'refs/tags/')
+```
+
+It performs a full checkout:
+
+```yaml
+fetch-depth: 0
+```
+
+This is required by `semantic-release`, which needs Git history and tags.
+
+The job runs:
+
+```bash
+semantic-release --dry-run
+```
+
+The dry run writes `versioning.env`. The workflow loads that file and exposes:
+
+```text
+RELEASE_CANDIDATE_VERSION
+```
+
+as the job output:
+
+```yaml
+release-candidate-version
+```
+
+The file `versioning.env` is uploaded as an artifact named:
+
+```text
+versioning-env
+```
+
+Retention is set to one day.
+
+## 🏗️ MkDocs Build
+
+Technical job ID:
+
+```yaml
+build
+```
+
+Container image:
+
+```text
+ghcr.io/eye-of-discipline/image-mkdocs:1.1.0
+```
+
+The job depends on:
+
+```yaml
+needs: set-version
+```
+
+It runs only when `set-version` succeeds and the ref is not a tag.
+
+The job maps GitLab-oriented variables for scripts that were originally written for GitLab CI:
+
+| Variable | Source |
+| --- | --- |
+| `RELEASE_CANDIDATE_VERSION` | `set-version` output |
+| `CI_COMMIT_TAG` | GitHub tag name when the ref is a tag, otherwise empty |
+| `CI_DEFAULT_BRANCH` | GitHub repository default branch |
+| `PAGES_BRANCH` | `gh-pages` |
+| `DOCS_VERSION` | release candidate version |
+
+The job downloads the `versioning-env` artifact and sources `versioning.env` before running the build steps.
+
+If `bin/prepare_build` exists, it is executed:
+
+```bash
+chmod +x ./bin/prepare_build
+./bin/prepare_build
+```
+
+This keeps repository scripts responsible for generated metadata, dashboard content, and verification job definitions.
+
+The job then publishes documentation with `mike`:
+
+```bash
+mike deploy "$DOCS_VERSION" latest \
+  --push \
+  --update-aliases \
+  -b "$PAGES_BRANCH" \
+  -m "chore: deploy version $DOCS_VERSION" \
+  --ignore-remote-status
+```
+
+The default version is set to the published version:
+
+```bash
+mike set-default --push "$DOCS_VERSION" \
+  -b "$PAGES_BRANCH" \
+  -m "chore: set default latest version $DOCS_VERSION"
+```
+
+The Pages branch is archived into:
+
+```text
+public/
+```
+
+and uploaded as the `public` artifact for one day.
+
+## 📍 Publish Version
+
+Technical job ID:
+
+```yaml
+publish-version
+```
+
+Container image:
+
+```text
+ghcr.io/eye-of-discipline/image-semantic-release:1.0.0
+```
+
+The job depends on:
+
+```yaml
+needs:
+  - set-version
+  - build
+```
+
+It runs only when both previous jobs succeed and the ref is not a tag.
+
+The job downloads:
+
+| Artifact | Purpose |
+| --- | --- |
+| `versioning-env` | release candidate environment |
+| `public` | generated MkDocs Pages content |
+
+It maps the same GitLab-compatible variables as the MkDocs build job:
+
+```text
+RELEASE_CANDIDATE_VERSION
+CI_COMMIT_TAG
+CI_DEFAULT_BRANCH
+```
+
+If the file exists, the job copies the GitLab creative process semantic-release configuration:
+
+```bash
+cp ci/gitlab/creative-process/.releaserc.cjs .releaserc.cjs
+```
+
+Then it publishes the release:
+
+```bash
+semantic-release
+```
+
+## Required Secrets
+
+The workflow expects:
+
+| Secret | Purpose |
+| --- | --- |
+| `SEMANTIC_RELEASE_TOKEN` | token used by `semantic-release` to create releases, tags, and commits |
+
+The secret is exposed to jobs as:
+
+```yaml
+GITHUB_TOKEN: ${{ secrets.SEMANTIC_RELEASE_TOKEN }}
+```
+
+## GitLab Compatibility Layer
+
+Several repository scripts still use GitLab CI variable names. The workflow intentionally maps those names instead of changing the scripts:
+
+| GitLab variable | GitHub source |
+| --- | --- |
+| `CI_COMMIT_TAG` | `github.ref_name` for tag refs, otherwise empty |
+| `CI_DEFAULT_BRANCH` | `github.event.repository.default_branch` |
+| `GIT_DEPTH` | set to `"0"` |
+| `RELEASE_CANDIDATE_VERSION` | generated by `semantic-release --dry-run` and `versioning.env` |
+
+This keeps the shell scripts portable between GitLab CI and GitHub Actions.
+
+## Artifacts
+
+| Artifact | Created by | Consumed by | Retention |
+| --- | --- | --- | --- |
+| `versioning-env` | `🕵 Set Version` | `🏗️ MkDocs build`, `📍 Publish Version` | 1 day |
+| `public` | `🏗️ MkDocs build` | `📍 Publish Version` | 1 day |
+
+## Pages Branch
+
+The workflow publishes MkDocs output to:
+
+```text
+gh-pages
+```
+
+The branch is fetched before publishing:
+
+```bash
+git fetch origin "$PAGES_BRANCH:$PAGES_BRANCH" 2>/dev/null || true
+```
+
+This allows `mike` to update existing versions instead of replacing the whole documentation history.

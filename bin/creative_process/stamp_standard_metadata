@@ -1,0 +1,245 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+VERSION="${CI_COMMIT_TAG:-${RELEASE_CANDIDATE_VERSION:-}}"
+STANDARDS_DIR="standards"
+DEFAULT_BRANCH="${CI_DEFAULT_BRANCH:-main}"
+BASE_REF="${STANDARD_METADATA_BASE_REF:-}"
+
+usage() {
+    cat <<'EOF'
+Usage:
+  bin/creative_process/stamp_standard_metadata --version VERSION [--standards-dir standards]
+
+Updates standard frontmatter metadata before publishing a discipline version.
+Only Markdown files changed since the latest tag on the default branch are stamped.
+
+Options:
+  -v, --version VERSION       Version used for since: and tags. Defaults to $CI_COMMIT_TAG or $RELEASE_CANDIDATE_VERSION
+  -s, --standards-dir PATH    Directory with standards. Default: standards
+  -b, --base-ref REF          Git ref used as diff base. Default: latest tag on $CI_DEFAULT_BRANCH
+      --default-branch NAME   Default branch used to find the latest tag. Default: $CI_DEFAULT_BRANCH or main
+  -h, --help                  Show this help
+EOF
+}
+
+fail() {
+    printf 'ERROR: %s\n' "$*" >&2
+    exit 1
+}
+
+parse_args() {
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+        -v|--version)
+            [[ $# -ge 2 ]] || fail "$1 requires a value"
+            VERSION="$2"
+            shift 2
+            ;;
+        -s|--standards-dir)
+            [[ $# -ge 2 ]] || fail "$1 requires a value"
+            STANDARDS_DIR="$2"
+            shift 2
+            ;;
+        -b|--base-ref)
+            [[ $# -ge 2 ]] || fail "$1 requires a value"
+            BASE_REF="$2"
+            shift 2
+            ;;
+        --default-branch)
+            [[ $# -ge 2 ]] || fail "$1 requires a value"
+            DEFAULT_BRANCH="$2"
+            shift 2
+            ;;
+        -h|--help)
+            usage
+            exit 0
+            ;;
+        *)
+            fail "unknown argument: $1"
+            ;;
+        esac
+    done
+}
+
+git_ref_exists() {
+    git rev-parse --verify --quiet "$1^{commit}" >/dev/null
+}
+
+default_branch_ref() {
+    if git_ref_exists "origin/$DEFAULT_BRANCH"; then
+        printf 'origin/%s' "$DEFAULT_BRANCH"
+        return
+    fi
+
+    if git_ref_exists "$DEFAULT_BRANCH"; then
+        printf '%s' "$DEFAULT_BRANCH"
+        return
+    fi
+
+    if git_ref_exists "refs/remotes/origin/$DEFAULT_BRANCH"; then
+        printf 'refs/remotes/origin/%s' "$DEFAULT_BRANCH"
+        return
+    fi
+}
+
+latest_default_branch_tag() {
+    local branch_ref
+    local tag
+
+    if [[ -n "$BASE_REF" ]]; then
+        git_ref_exists "$BASE_REF" || fail "base ref not found: $BASE_REF"
+        printf '%s' "$BASE_REF"
+        return
+    fi
+
+    branch_ref="$(default_branch_ref || true)"
+    if [[ -n "$branch_ref" ]]; then
+        tag="$(git describe --tags --abbrev=0 "$branch_ref" 2>/dev/null || true)"
+        if [[ -n "$tag" ]]; then
+            printf '%s' "$tag"
+            return
+        fi
+
+        tag="$(git tag --merged "$branch_ref" --sort=-creatordate | head -n 1)"
+        if [[ -n "$tag" ]]; then
+            printf '%s' "$tag"
+            return
+        fi
+    fi
+
+    tag="$(git tag --merged HEAD --sort=-creatordate | head -n 1)"
+    if [[ -n "$tag" ]]; then
+        printf '%s' "$tag"
+    fi
+}
+
+is_standard_markdown_file() {
+    local file="$1"
+
+    [[ "$file" == "$STANDARDS_DIR"/*.md || "$file" == "$STANDARDS_DIR"/*/*.md || "$file" == "$STANDARDS_DIR"/*/*/*.md || "$file" == "$STANDARDS_DIR"/*/*/*/*.md ]] || return 1
+    [[ "$file" == *.md ]] || return 1
+    [[ "$file" != "$STANDARDS_DIR/template/"* ]] || return 1
+    [[ -f "$file" ]] || return 1
+}
+
+changed_standard_markdown_files() {
+    local base_ref="$1"
+    local file
+
+    {
+        if [[ -n "$base_ref" ]]; then
+            git diff --name-only --diff-filter=ACMR "$base_ref" -- "$STANDARDS_DIR"
+        else
+            find "$STANDARDS_DIR" -name "*.md" -type f
+        fi
+
+        git ls-files --others --exclude-standard "$STANDARDS_DIR"
+    } | while IFS= read -r file; do
+        if is_standard_markdown_file "$file"; then
+            printf '%s\n' "$file"
+        fi
+    done | sort -u
+}
+
+update_standard_metadata() {
+    local file="$1"
+
+    awk -v version="$VERSION" '
+    function print_tags() {
+        printf "tags: [%s, %s]\n", domain, version
+        tags_written = 1
+    }
+
+    BEGIN {
+        frontmatter = 0
+        frontmatter_delimiter = 0
+        in_tags = 0
+        tags_written = 0
+        domain = ""
+    }
+
+    /^---$/ {
+        frontmatter_delimiter++
+        if (frontmatter_delimiter == 1) {
+            frontmatter = 1
+        } else if (frontmatter_delimiter == 2) {
+            if (!tags_written && domain != "") {
+                print_tags()
+            }
+            frontmatter = 0
+            in_tags = 0
+        }
+        print
+        next
+    }
+
+    frontmatter {
+        if (in_tags) {
+            if ($0 ~ /^[[:space:]]*-/ || $0 ~ /^[[:space:]]*$/) {
+                next
+            }
+            in_tags = 0
+        }
+
+        if ($0 ~ /^domain:[[:space:]]*/) {
+            domain = $0
+            sub(/^domain:[[:space:]]*/, "", domain)
+            print
+            next
+        }
+
+        if ($0 ~ /^since:[[:space:]]*/) {
+            print "since: " version
+            next
+        }
+
+        if ($0 ~ /^tags:[[:space:]]*/) {
+            if (domain != "") {
+                print_tags()
+            } else {
+                print
+            }
+            in_tags = 1
+            next
+        }
+    }
+
+    { print }
+    ' "$file" > "${file}.tmp"
+
+    mv "${file}.tmp" "$file"
+}
+
+main() {
+    local updated=0
+    local base_ref
+    local file
+
+    parse_args "$@"
+
+    [[ -n "$VERSION" ]] || fail "CI_COMMIT_TAG i RELEASE_CANDIDATE_VERSION są puste"
+    [[ -d "$STANDARDS_DIR" ]] || fail "standards directory not found: $STANDARDS_DIR"
+
+    printf 'Stamping standard metadata: %s\n' "$VERSION"
+    base_ref="$(latest_default_branch_tag)"
+    if [[ -n "$base_ref" ]]; then
+        printf 'Diff base: %s\n' "$base_ref"
+    else
+        printf 'Diff base: none, stamping all standard Markdown files.\n'
+    fi
+
+    while IFS= read -r file; do
+        if grep -q '^since:' "$file"; then
+            update_standard_metadata "$file"
+            printf '  updated: %s\n' "$file"
+            updated=1
+        fi
+    done < <(changed_standard_markdown_files "$base_ref")
+
+    if [[ "$updated" -eq 0 ]]; then
+        printf 'No changed standards metadata to stamp.\n'
+    fi
+}
+
+main "$@"

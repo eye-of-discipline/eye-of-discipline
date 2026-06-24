@@ -1,0 +1,160 @@
+declare -i term_width=130
+
+# Wyświetla niebieski komunikat pomocniczy.
+#
+# usage:
+#   h3 <treść>
+#
+# example:
+#   h3 "Uruchamianie helpera"
+#
+# outputs:
+#   Sformatowany komunikat na standardowym wyjściu
+h3() {
+    echo -e "\033[1;34m---> $* \033[0m"
+}
+
+# Wyświetla wyśrodkowany tekst pomiędzy kolorowymi liniami.
+#
+# usage:
+#   banner <kolor> <treść>
+#
+# example:
+#   banner green "Operacja zakończona powodzeniem"
+#
+# outputs:
+#   Kolorowy baner na standardowym wyjściu
+banner() {
+    local color_name="$1"
+    shift
+    local text="$*"
+
+    local width="${term_width:-$(tput cols)}"
+
+    # kolor tekstu (przyciemniony)
+    local fg
+    case "$color_name" in
+    red)    fg='\e[31m' ;;  # czerwony tekst [web:42]
+    green)  fg='\e[32m' ;;  # zielony tekst [web:42]
+    blue)   fg='\e[34m' ;;  # niebieski tekst [web:42]
+    yellow) fg='\e[33m' ;;  # żółty tekst [web:42]
+    *)      fg='\e[39m' ;;  # domyślny kolor tekstu [web:42]
+    esac
+
+    # kolor tła dla pełnych linii (góra/dół)
+    local bg
+    case "$color_name" in
+    red)    bg='\e[41m' ;;  # czerwone tło [web:42]
+    green)  bg='\e[42m' ;;
+    blue)   bg='\e[44m' ;;
+    yellow) bg='\e[43m' ;;
+    *)      bg='\e[49m' ;;  # domyślne tło [web:42]
+    esac
+
+    local reset='\e[0m'
+    local block_char=' '  # kolor zrobi tło
+
+    # górna / dolna linia – wypełniona kolorem tła
+    local border
+    border="${bg}$(printf '%s' "$(printf "$block_char%.0s" $(seq 1 "$width"))")${reset}"
+
+    # długość tekstu (bez escape'ów)
+    local txt_len
+    txt_len=$(wc -m <<<"$text")
+    txt_len=${txt_len// /}
+
+    local padding_size=$(( (width - txt_len) / 2 ))
+    (( padding_size < 0 )) && padding_size=0
+
+    # padding po bokach – „pusta” przestrzeń bez tła
+    local padding
+    padding="$(printf ' %.0s' $(seq 1 "$padding_size"))"
+
+    # napis: kolor tekstu, domyślne tło (49m) [web:42][web:44]
+    local bg_reset='\e[49m'
+    local colored_text="${fg}${bg_reset}${text}\e[39m${reset}"
+
+    echo -e "$border"
+    # linia z napisem bez tła, tylko centrowanie spacjami
+    echo -e "${padding}${colored_text}${padding}"
+    echo -e "$border"
+}
+
+# Wyświetla nagłówek pierwszego poziomu wyśrodkowany między separatorami.
+#
+# usage:
+#   h1 <treść>
+#
+# example:
+#   h1 "Etap wdrożenia"
+#
+# outputs:
+#   Sformatowany nagłówek na standardowym wyjściu
+h1() {
+    declare border padding text
+    border='\e[1;34m'"$(printf '=%.0s' $(seq 1 "$term_width"))"'\e[0m'
+    padding="$(printf ' %.0s' $(seq 1 $(((term_width - $(wc -m <<<"$*")) / 2))))"
+    text="\\e[1m$*\\e[0m"
+    echo -e "$border"
+    echo -e "${padding}${text}${padding}"
+    echo -e "$border"
+}
+
+# Wyświetla nagłówek drugiego poziomu, gdy logger akceptuje poziom INFO.
+#
+# usage:
+#   h2 <treść>
+#
+# example:
+#   h2 "Pobieranie zależności"
+#
+# outputs:
+#   Sformatowany komunikat na standardowym wyjściu
+h2() {
+    if logger "INFO"; then
+    printf '\e[1;33m==>\e[37;1m %s\e[0m\n' "$*"
+    fi
+}
+
+# Wyświetla komunikat informacyjny w niebieskim banerze.
+#
+# usage:
+#   info <treść>
+#
+# example:
+#   info "Rozpoczęto przetwarzanie"
+#
+# outputs:
+#   Niebieski baner na standardowym wyjściu
+info() {
+    banner blue "$1"
+}
+
+# Wyświetla ostrzeżenie w żółtym banerze.
+#
+# usage:
+#   warn <treść>
+#
+# example:
+#   warn "Brak opcjonalnej konfiguracji"
+#
+# outputs:
+#   Żółty baner na standardowym wyjściu
+warn() {
+    banner yellow "$1"
+}
+
+# Wyświetla komunikat krytyczny w czerwonym banerze i przerywa job.
+#
+# usage:
+#   critical <treść>
+#
+# example:
+#   critical "Nie można kontynuować"
+#
+# outputs:
+#   Czerwony baner na standardowym wyjściu; kończy job kodem 1
+critical() {
+    banner red "$1"
+    exit 1
+}
