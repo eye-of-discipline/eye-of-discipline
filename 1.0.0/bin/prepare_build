@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+VERSION="${CI_COMMIT_TAG:-${RELEASE_CANDIDATE_VERSION:-}}"
+REPORT_GROUP_ID="${REPORT_GROUP_ID:-132728705}"
+DISCIPLINE_FILE="${DISCIPLINE_FILE:-discipline.yaml}"
+CONFORMANCE_FILE="${CONFORMANCE_FILE:-conformance.json}"
+DASHBOARD_FILE="${DASHBOARD_FILE:-docs/dashboard.md}"
+DASHBOARD_DETAILS_DIR="${DASHBOARD_DETAILS_DIR:-docs/dashboard}"
+DASHBOARD_TEMPLATES_DIR="${DASHBOARD_TEMPLATES_DIR:-bin/reporting_process/templates}"
+GITLAB_URL="${CI_SERVER_URL:-${GITLAB_URL:-https://gitlab.com}}"
+
+if [[ -z "$VERSION" ]]; then
+    echo "ERROR: CI_COMMIT_TAG i RELEASE_CANDIDATE_VERSION są puste" >&2
+    exit 1
+fi
+
+# bin/reporting_process/discipline_generate_dashboard \
+#         --gitlab-url "$GITLAB_URL" \
+#         --group-id "$REPORT_GROUP_ID" \
+#         --discipline-file "$DISCIPLINE_FILE" \
+#         --report-file "$CONFORMANCE_FILE" \
+#         --output "$DASHBOARD_FILE" \
+#         --details-dir "$DASHBOARD_DETAILS_DIR" \
+#         --templates-dir "$DASHBOARD_TEMPLATES_DIR"
+bin/creative_process/stamp_standard_metadata --version "$VERSION"
+bin/creative_process/generate_checks_jobs
+# bin/commit_build_changes

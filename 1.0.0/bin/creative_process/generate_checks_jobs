@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+usage() {
+    cat <<'EOF'
+Usage:
+  bin/creative_process/generate_checks_jobs
+
+Refreshes ci/gitlab/verify/cheks_jobs.yml from standards/**/.gitlab-ci.yml.
+EOF
+}
+
+main() {
+    if [[ "${1:-}" == "-h" || "${1:-}" == "--help" ]]; then
+        usage
+        exit 0
+    fi
+
+    if [[ ! -f ./bin/creative_process/discipline_generate_checks_jobs ]]; then
+        printf 'Skipping checks jobs generation: bin/creative_process/discipline_generate_checks_jobs not found\n'
+        exit 0
+    fi
+
+    chmod +x ./bin/creative_process/discipline_generate_checks_jobs
+    ./bin/creative_process/discipline_generate_checks_jobs
+}
+
+main "$@"
